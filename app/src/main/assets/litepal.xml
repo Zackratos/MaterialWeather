@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<litepal>
+    <dbname value="weather"/>
+    <version value="1"/>
+    <list>
+        <mapping class="org.zack.weather.Province"/>
+        <mapping class="org.zack.weather.City"/>
+        <mapping class="org.zack.weather.County"/>
+        <mapping class="org.zack.weather.Weather"/>
+    </list>
+</litepal>

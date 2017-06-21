@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="main">#00BFFF</color>
+    <color name="press">#00B2EE</color>
+
+
+    <color name="colorPrimary">@color/main</color>
+    <color name="colorPrimaryDark">@color/main</color>
+    <color name="colorAccent">@android:color/white</color>
+
+
+
+    <!--common-->
+    <color name="gray">#CCCCCC</color>
+
+    <!--drawer-->
+    <color name="drawer_county_list">@android:color/white</color>
+
+    <color name="drawer_item_normal">@android:color/transparent</color>
+    <color name="drawer_item_checked">@color/gray</color>
+
+</resources>

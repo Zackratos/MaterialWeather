@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/add_place_item_text"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/add_place_item_height"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:background="?android:attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:textSize="20sp">
+
+</TextView>
