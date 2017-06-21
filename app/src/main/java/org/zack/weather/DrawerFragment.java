@@ -122,7 +122,6 @@ public class DrawerFragment extends BaseFragment {
                     }
                 });
 
-
     }
 
 
