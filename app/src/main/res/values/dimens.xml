@@ -10,9 +10,12 @@
     <!--drawer-->
     <dimen name="drawer_item_height">60dp</dimen>
     <dimen name="drawer_item_padding">16dp</dimen>
-
+    <dimen name="drawer_item_text">18sp</dimen>
 
     <!--add_place-->
     <dimen name="add_place_item_height">80dp</dimen>
+
+
+
 
 </resources>

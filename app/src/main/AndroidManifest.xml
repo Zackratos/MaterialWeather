@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.zack.weather">
+    package="org.zackratos.weather">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".WeatherApplication"
+        android:name="org.zackratos.weather.WeatherApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="org.zackratos.weather.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
@@ -23,9 +23,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".addPlace.AddPlaceActivity"
+        <activity android:name="org.zackratos.weather.addPlace.AddPlaceActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName="org.zackratos.weather.MainActivity"/>
     </application>
 
 </manifest>

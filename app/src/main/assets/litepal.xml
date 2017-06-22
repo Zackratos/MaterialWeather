@@ -3,9 +3,9 @@
     <dbname value="weather"/>
     <version value="1"/>
     <list>
-        <mapping class="org.zack.weather.Province"/>
-        <mapping class="org.zack.weather.City"/>
-        <mapping class="org.zack.weather.County"/>
-        <mapping class="org.zack.weather.Weather"/>
+        <mapping class="org.zackratos.weather.Province"/>
+        <mapping class="org.zackratos.weather.City"/>
+        <mapping class="org.zackratos.weather.County"/>
+        <mapping class="org.zackratos.weather.Weather"/>
     </list>
 </litepal>
