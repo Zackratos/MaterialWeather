@@ -17,7 +17,10 @@ import retrofit2.http.QueryMap;
 public interface HeWindApi {
 
     @GET("weather")
-    Observable getWeather(@QueryMap Map<String, String> map);
+    Observable<Weather> rxWeather(@QueryMap Map<String, String> map);
+
+    @GET("weather")
+    Call<Weather> weather(@QueryMap Map<String, String> map);
 
     @GET("search")
     Observable<HeSearch> rxSearch(@QueryMap Map<String, String> map);
@@ -30,4 +33,6 @@ public interface HeWindApi {
 
     @GET("now")
     Call<HeNow> now(@QueryMap Map<String, String> map);
+
+
 }
