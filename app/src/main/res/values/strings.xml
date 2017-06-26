@@ -5,4 +5,12 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+
+    <!--add_place-->
+    <string name="add_place_province">省份</string>
+    <string name="add_place_city">城市</string>
+    <string name="add_place_county">地区</string>
+    <string name="add_place_get_place_fail">获取%s失败，请检查网络</string>
+    <string name="add_place_refresh_fail">刷新失败，请检查网络</string>
 </resources>

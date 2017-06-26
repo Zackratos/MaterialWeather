@@ -1,14 +1,22 @@
 package org.zackratos.weather.addPlace.city;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import org.litepal.crud.DataSupport;
 import org.zackratos.weather.City;
-import org.zackratos.weather.Constants;
+
+import org.zackratos.weather.HttpUtils;
 import org.zackratos.weather.PlaceApi;
-import org.zackratos.weather.addPlace.AddPlaceActivity;
+
+import org.zackratos.weather.R;
+import org.zackratos.weather.SingleToast;
+import org.zackratos.weather.addPlace.PlaceAdapter;
+import org.zackratos.weather.addPlace.PlaceCallback;
 import org.zackratos.weather.addPlace.PlaceFragment;
 import org.zackratos.weather.addPlace.county.CountyFragment;
+
 
 import java.util.List;
 
@@ -19,7 +27,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static org.zackratos.weather.Constants.AddPlace.PROVINCE_ID;
 
@@ -27,7 +34,7 @@ import static org.zackratos.weather.Constants.AddPlace.PROVINCE_ID;
  * Created by Administrator on 2017/6/19.
  */
 
-public class CityFragment extends PlaceFragment {
+public class CityFragment extends PlaceFragment<City> {
 
     public static CityFragment newInstance(int provinceId) {
         CityFragment fragment = new CityFragment();
@@ -38,22 +45,26 @@ public class CityFragment extends PlaceFragment {
     }
 
 
-    private List<City> cities;
+
+    private int provinceId;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        provinceId = getArguments().getInt(PROVINCE_ID, 0);
+
+    }
 
 
     @Override
-    protected void onItemClick(int position) {
-        City city = cities.get(position);
-        AddPlaceActivity activity = (AddPlaceActivity) getActivity();
-        activity.replaceFragment(CountyFragment.newInstance(
-                getArguments().getInt(PROVINCE_ID, 0),
-                city.getCode()
-        ));
+    protected void onItemClick(PlaceAdapter<City> adapter, int position) {
+        City city = adapter.getData().get(position);
+        callback.replaceFragment(CountyFragment
+                .newInstance(provinceId, city.getCode()));
     }
 
     @Override
     protected void queryPlace() {
-        final int provinceId = getArguments().getInt(PROVINCE_ID, 0);
         Observable.just(provinceId)
                 .subscribeOn(Schedulers.io())
                 .compose(this.<Integer>bindToLifecycle())
@@ -70,13 +81,10 @@ public class CityFragment extends PlaceFragment {
                         if (cities != null && cities.size() > 0) {
                             return cities;
                         }
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(Constants.Http.PLACE_URL)
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
+                        Retrofit retrofit = HttpUtils.getPlaceRetrofit();
                         PlaceApi api = retrofit.create(PlaceApi.class);
 
-                        List<City> mapCities = api.getCities(provinceId).execute().body();
+                        List<City> mapCities = api.getCitiesCall(provinceId).execute().body();
                         for (int i = 0; i < mapCities.size(); i++) {
                             City city = mapCities.get(i);
                             city.setProvinceId(provinceId);
@@ -90,18 +98,22 @@ public class CityFragment extends PlaceFragment {
                 .subscribe(new Consumer<List<City>>() {
                     @Override
                     public void accept(@NonNull List<City> cities) throws Exception {
-                        CityFragment.this.cities = cities;
-                        PlaceAdapter<City> adapter = new PlaceAdapter<>(cities);
-                        placeListView.setAdapter(adapter);
+                        updateUI(cities);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
-
+                        SingleToast.getInstance(getActivity())
+                                .show(getString(R.string.add_place_get_place_fail,
+                                        getString(R.string.add_place_city)));
                     }
                 });
 
     }
 
 
+    @Override
+    protected void refreshPlace() {
+
+    }
 }

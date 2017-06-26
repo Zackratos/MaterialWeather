@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/add_place_item_height"
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:gravity="center_vertical">
+
+
+    <TextView
+        android:id="@+id/search_item_county"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/add_place_search_item_county"
+        android:layout_margin="@dimen/add_place_search_item_item_margin"
+        android:textColor="@color/add_place_search_item_county"
+        tools:text="北京"/>
+
+    <TextView
+        android:id="@+id/search_item_province"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/add_place_search_item_item_margin"
+        tools:text="北京"/>
+
+    <TextView
+        android:id="@+id/search_item_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/add_place_search_item_item_margin"
+        tools:text="北京"/>
+
+
+</LinearLayout>

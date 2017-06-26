@@ -20,4 +20,9 @@
     <color name="drawer_item_normal">@android:color/transparent</color>
     <color name="drawer_item_checked">@color/gray</color>
 
+
+    <!--add_place-->
+    <color name="add_place_search_item_county">@android:color/black</color>
+
+
 </resources>

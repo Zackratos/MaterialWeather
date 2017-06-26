@@ -24,6 +24,11 @@ public class Weather extends DataSupport {
         this.weatherId = builder.weatherId;
     }
 
+
+    public int getId() {
+        return id;
+    }
+
     public void setChecked(boolean checked) {
         this.checked = checked;
     }
@@ -36,6 +41,9 @@ public class Weather extends DataSupport {
         return countyName;
     }
 
+    public String getWeatherId() {
+        return weatherId;
+    }
 
     public static class Builder {
 

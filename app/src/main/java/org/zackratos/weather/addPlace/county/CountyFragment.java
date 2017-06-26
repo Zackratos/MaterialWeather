@@ -1,35 +1,37 @@
 package org.zackratos.weather.addPlace.county;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import org.litepal.crud.DataSupport;
-import org.zackratos.weather.Constants;
 import org.zackratos.weather.County;
+import org.zackratos.weather.HttpUtils;
 import org.zackratos.weather.PlaceApi;
+import org.zackratos.weather.R;
+import org.zackratos.weather.SingleToast;
+import org.zackratos.weather.addPlace.PlaceAdapter;
 import org.zackratos.weather.addPlace.PlaceFragment;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static org.zackratos.weather.Constants.AddPlace.CITY_ID;
 import static org.zackratos.weather.Constants.AddPlace.PROVINCE_ID;
-import static org.zackratos.weather.Constants.County.COUNTY_ID;
 
 /**
  * Created by Administrator on 2017/6/19.
  */
 
-public class CountyFragment extends PlaceFragment {
+public class CountyFragment extends PlaceFragment<County> {
 
     public static CountyFragment newInstance(int provinceId, int cityId) {
         CountyFragment fragment = new CountyFragment();
@@ -41,31 +43,48 @@ public class CountyFragment extends PlaceFragment {
     }
 
 
-    private List<County> counties;
+    private int provinceId;
+
+    private int cityId;
 
 
     @Override
-    protected void onItemClick(int position) {
-        County county = counties.get(position);
-        Intent intent = new Intent();
-        intent.putExtra(COUNTY_ID, county.getId());
-        getActivity().setResult(Activity.RESULT_OK, intent);
-        getActivity().finish();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        provinceId = getArguments().getInt(PROVINCE_ID, 0);
+        cityId = getArguments().getInt(CITY_ID, 0);
     }
 
 
-    public static int getCountyId(Intent intent) {
-
-        return intent.getIntExtra(COUNTY_ID, 0);
+    @Override
+    protected void onItemClick(PlaceAdapter<County> adapter, int position) {
+        County county = adapter.getData().get(position);
+        callback.addCounty(county.getId());
     }
+
+
+
+
 
 
 
     @Override
     protected void queryPlace() {
-        final int provinceId = getArguments().getInt(PROVINCE_ID, 0);
-        final int cityId = getArguments().getInt(CITY_ID, 0);
+/*        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<County> counties = HttpUtils.getPlaceRetrofit()
+                            .create(PlaceApi.class)
+                            .getCountiesCall(provinceId, cityId)
+                            .execute().body();
 
+                    updateUI(counties);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();*/
 
         Observable.just(cityId)
                 .subscribeOn(Schedulers.io())
@@ -83,13 +102,10 @@ public class CountyFragment extends PlaceFragment {
                         if (counties != null && counties.size() > 0) {
                             return counties;
                         }
-
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(Constants.Http.PLACE_URL)
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
+//                        Thread.sleep(5000);
+                        Retrofit retrofit = HttpUtils.getPlaceRetrofit();
                         PlaceApi api = retrofit.create(PlaceApi.class);
-                        List<County> mapCounties = api.getCounties(provinceId, cityId)
+                        List<County> mapCounties = api.getCountiesCall(provinceId, cityId)
                                 .execute().body();
                         for (int i = 0; i < mapCounties.size(); i++) {
                             County county = mapCounties.get(i);
@@ -97,21 +113,52 @@ public class CountyFragment extends PlaceFragment {
                             county.save();
                         }
                         return mapCounties;
+
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<County>>() {
+                .subscribe(new Observer<List<County>>() {
                     @Override
-                    public void accept(@NonNull List<County> counties) throws Exception {
-                        CountyFragment.this.counties = counties;
-                        PlaceAdapter<County> adapter = new PlaceAdapter<>(counties);
-                        placeListView.setAdapter(adapter);
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable = d;
                     }
-                }, new Consumer<Throwable>() {
+
                     @Override
-                    public void accept(@NonNull Throwable throwable) throws Exception {
+                    public void onNext(@NonNull List<County> counties) {
+                        updateUI(counties);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Context context = getActivity();
+                        if (context != null) {
+                            SingleToast.getInstance(context)
+                                    .show(getString(R.string.add_place_get_place_fail,
+                                            getString(R.string.add_place_county)));
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
 
                     }
                 });
+    }
+
+
+    @Override
+    protected void refreshPlace() {
+
+    }
+
+
+    private Disposable disposable;
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (disposable != null) {
+            disposable.dispose();
+        }
     }
 }

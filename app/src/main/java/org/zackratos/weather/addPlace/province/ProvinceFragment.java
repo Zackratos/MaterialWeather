@@ -2,17 +2,15 @@ package org.zackratos.weather.addPlace.province;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 
 import org.litepal.crud.DataSupport;
-import org.zackratos.weather.Constants;
+import org.zackratos.weather.HttpUtils;
 import org.zackratos.weather.PlaceApi;
 import org.zackratos.weather.Province;
-import org.zackratos.weather.addPlace.AddPlaceActivity;
+import org.zackratos.weather.R;
+import org.zackratos.weather.SingleToast;
+import org.zackratos.weather.addPlace.PlaceAdapter;
 import org.zackratos.weather.addPlace.PlaceFragment;
 import org.zackratos.weather.addPlace.city.CityFragment;
 
@@ -21,19 +19,20 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Administrator on 2017/6/17.
  */
 
-public class ProvinceFragment extends PlaceFragment {
+public class ProvinceFragment extends PlaceFragment<Province> {
 
 
     public static ProvinceFragment newInstance() {
@@ -41,55 +40,23 @@ public class ProvinceFragment extends PlaceFragment {
     }
 
 
-
-
-
     private ProvincePresenter presenter;
-    private List<Province> provinces;
-
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         presenter = new ProvincePresenter(null);
-        Log.d(TAG, "onCreate: ");
 
     }
 
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: ");
+    protected void onItemClick(PlaceAdapter<Province> adapter, int position) {
+        Province province = adapter.getData().get(position);
+        callback.replaceFragment(CityFragment.newInstance(province.getCode()));
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: ");
-    }
-
-    @Override
-    protected void onItemClick(int position) {
-        Province province = provinces.get(position);
-        AddPlaceActivity activity = (AddPlaceActivity) getActivity();
-        activity.replaceFragment(CityFragment.newInstance(province.getCode()));
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(org.zackratos.weather.R.menu.add_place, menu);
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        return super.onOptionsItemSelected(item);
-    }
 
 
 
@@ -110,15 +77,10 @@ public class ProvinceFragment extends PlaceFragment {
                         if (provinces != null && provinces.size() > 0) {
                             return provinces;
                         }
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(Constants.Http.PLACE_URL)
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-                        PlaceApi api = retrofit.create(PlaceApi.class);
-                        List<Province> mapProvinces = api.getProvinces()
+                        PlaceApi api = HttpUtils.getPlaceRetrofit().create(PlaceApi.class);
+                        List<Province> mapProvinces = api.getProvincesCall()
                                 .execute().body();
                         DataSupport.saveAll(mapProvinces);
-
                         return mapProvinces;
                     }
                 })
@@ -126,17 +88,91 @@ public class ProvinceFragment extends PlaceFragment {
                 .subscribe(new Consumer<List<Province>>() {
                     @Override
                     public void accept(@NonNull List<Province> provinces) throws Exception {
-                        ProvinceFragment.this.provinces = provinces;
-                        PlaceAdapter<Province> adapter = new PlaceAdapter<>(provinces);
-                        placeListView.setAdapter(adapter);
+                        updateUI(provinces);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
-
+                        SingleToast.getInstance(getActivity())
+                                .show(getString(R.string.add_place_get_place_fail,
+                                        getString(R.string.add_place_province)));
                     }
                 });
 
+    }
+
+
+    @Override
+    protected void refreshPlace() {
+        HttpUtils.getPlaceRetrofit()
+                .create(PlaceApi.class)
+                .getProvinces()
+                .subscribeOn(Schedulers.io())
+                .compose(this.<List<Province>>bindToLifecycle())
+                .flatMap(new Function<List<Province>, ObservableSource<Province>>() {
+                    @Override
+                    public ObservableSource<Province> apply(@NonNull List<Province> provinces) throws Exception {
+                        return Observable.fromIterable(provinces);
+                    }
+                })
+                .filter(new Predicate<Province>() {
+                    @Override
+                    public boolean test(@NonNull Province province) throws Exception {
+
+                        List<Province> provinces = DataSupport.select()
+                                .where("code = ?", String.valueOf(province.getCode()))
+                                .find(Province.class);
+                        return provinces == null || provinces.size() == 0;
+                    }
+                })
+                .doOnNext(new Consumer<Province>() {
+                    @Override
+                    public void accept(@NonNull Province province) throws Exception {
+                        province.save();
+                    }
+                })
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        updateProvince();
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Province>() {
+                    @Override
+                    public void accept(@NonNull Province province) throws Exception {
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        refreshLayout.setRefreshing(false);
+                        SingleToast.getInstance(getActivity()).show(R.string.add_place_refresh_fail);
+                    }
+                });
+
+    }
+
+
+
+
+    private void updateProvince() {
+        Observable.create(new ObservableOnSubscribe<List<Province>>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<List<Province>> e) throws Exception {
+                List<Province> provinces = DataSupport.findAll(Province.class);
+                e.onNext(provinces);
+                e.onComplete();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Province>>() {
+                    @Override
+                    public void accept(@NonNull List<Province> provinces) throws Exception {
+                        updateUI(provinces);
+                        refreshLayout.setRefreshing(false);
+                    }
+                });
     }
 
 
