@@ -1,22 +1,38 @@
 package org.zackratos.weather;
 
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.zackratos.ultimatebar.UltimateBar;
+import org.zackratos.weather.hewind.Now;
+import org.zackratos.weather.weather.WeatherFragment;
+import org.zackratos.weather.weatherlist.DrawerFragment;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class MainActivity extends BaseActivity implements WeatherFragment.Callback, DrawerFragment.Callback {
 
 
-    private TextView nameView;
+    @BindView(R.id.main_collapsing)
+    CollapsingToolbarLayout collapsingToolbar;
+
+    @BindView(R.id.main_name_view)
+    TextView nameView;
+
+//    @BindView(R.id.toolbar)
+//    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,14 +42,20 @@ public class MainActivity extends BaseActivity implements WeatherFragment.Callba
         UltimateBar ultimateBar = new UltimateBar(this);
         ultimateBar.setColorBarForDrawer(ContextCompat.getColor(this, R.color.main));
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
+
+        Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
+
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = ButterKnife.findById(this, R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+
 
 //        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 //        navigationView.setNavigationItemSelectedListener(this);
@@ -43,7 +65,8 @@ public class MainActivity extends BaseActivity implements WeatherFragment.Callba
                 .commit();
 
 
-        nameView = (TextView) findViewById(R.id.main_name_view);
+
+
     }
 
     @Override
@@ -72,6 +95,7 @@ public class MainActivity extends BaseActivity implements WeatherFragment.Callba
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            
             return true;
         }
 
@@ -115,5 +139,12 @@ public class MainActivity extends BaseActivity implements WeatherFragment.Callba
     @Override
     public void setName(String name) {
         nameView.setText(name);
+    }
+
+
+    @Override
+    public void setNowInfo(Now now) {
+        Log.d(TAG, "setNowInfo: ");
+        collapsingToolbar.setTitle(now.getCond().getTxt() + "   " + now.getTmp() + "°");
     }
 }

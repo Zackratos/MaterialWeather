@@ -17,23 +17,48 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"
+            android:padding="@dimen/weather_card_margin"
             android:orientation="vertical">
 
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:contentPadding="@dimen/weather_card_padding">
 
                 <LinearLayout
+                    android:id="@+id/weather_daily_container"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <RelativeLayout
+                        android:id="@+id/weather_daily_first"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="sdfasf"/>
+                        android:orientation="horizontal"
+                        android:layout_height="@dimen/weather_daily_height">
+
+                        <TextView
+                            android:id="@+id/weather_daily_first_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"/>
+
+                        <TextView
+                            android:id="@+id/weather_daily_first_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"/>
+
+                        <TextView
+                            android:id="@+id/weather_daily_first_des"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"/>
+
+                    </RelativeLayout>
+
 
 
                 </LinearLayout>
@@ -42,12 +67,17 @@
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/weather_card_space">
 
                 <LinearLayout
+                    android:id="@+id/weather_daily_parent"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+
+
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>

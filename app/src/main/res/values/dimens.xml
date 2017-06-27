@@ -18,6 +18,10 @@
     <dimen name="add_place_search_item_item_margin">10dp</dimen>
 
 
-
+    <!--weather-->
+    <dimen name="weather_card_margin">10dp</dimen>
+    <dimen name="weather_card_padding">10dp</dimen>
+    <dimen name="weather_card_space">10dp</dimen>
+    <dimen name="weather_daily_height">60dp</dimen>
 
 </resources>

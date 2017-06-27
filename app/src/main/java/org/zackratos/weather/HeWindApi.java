@@ -1,11 +1,14 @@
 package org.zackratos.weather;
 
+import org.zackratos.weather.hewind.HeWeather;
+import org.zackratos.weather.hewind.HeWind;
 import org.zackratos.weather.hewind.now.HeNow;
 import org.zackratos.weather.hewind.srarch.HeSearch;
 
 import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
@@ -17,7 +20,10 @@ import retrofit2.http.QueryMap;
 public interface HeWindApi {
 
     @GET("weather")
-    Observable<Weather> rxWeather(@QueryMap Map<String, String> map);
+    Observable<HeWind> rxWeather(@QueryMap Map<String, String> map);
+
+    @GET("weather")
+    Observable<ResponseBody> rxWeatherBody(@QueryMap Map<String, String> map);
 
     @GET("weather")
     Call<Weather> weather(@QueryMap Map<String, String> map);

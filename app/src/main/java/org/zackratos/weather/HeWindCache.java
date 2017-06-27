@@ -8,7 +8,4 @@ public interface HeWindCache {
 
 
 
-
-
-
 }

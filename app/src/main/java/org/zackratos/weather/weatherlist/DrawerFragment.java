@@ -1,4 +1,4 @@
-package org.zackratos.weather;
+package org.zackratos.weather.weatherlist;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,6 +14,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
 import org.litepal.crud.DataSupport;
+import org.zackratos.weather.BaseFragment;
+import org.zackratos.weather.Constants;
+import org.zackratos.weather.County;
+import org.zackratos.weather.R;
+import org.zackratos.weather.SingleToast;
+import org.zackratos.weather.Weather;
 import org.zackratos.weather.addPlace.AddPlaceActivity;
 import org.zackratos.weather.hewind.srarch.SearchBasic;
 

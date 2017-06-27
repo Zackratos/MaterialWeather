@@ -39,6 +39,11 @@ public class HttpUtils {
     }
 
 
+    public static HeWindApi getHeWindApi() {
+        return getHeWindRetrofit().create(HeWindApi.class);
+    }
+
+
     public static Map<String, String> getSeniverseMap() {
         Map<String, String> map = new HashMap<>();
         map.put("key", "2zxo2z17nleuu0w7");
