@@ -14,6 +14,8 @@ public class Constants {
 
         public static final String HE_WIND_URL = "https://free-api.heweather.com/v5/";
 
+        public static final String HE_WIND_ICON = "https://cdn.heweather.com/cond_icon/";
+
     }
 
 

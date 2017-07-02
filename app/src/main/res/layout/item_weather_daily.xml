@@ -1,13 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/weather_daily_item"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/weather_daily_height">
+    android:layout_height="@dimen/weather_daily_height"
+    android:layout_margin="@dimen/weather_card_margin">
+
+
+<LinearLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/daily_date"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center"/>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+        <ImageView
+            android:id="@+id/daily_day_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+        <ImageView
+            android:id="@+id/daily_night_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"/>
+    </FrameLayout>
 
 
 
+    <TextView
+        android:id="@+id/daily_temp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center"/>
 
+</LinearLayout>
 
-
-</RelativeLayout>
+</android.support.v7.widget.CardView>

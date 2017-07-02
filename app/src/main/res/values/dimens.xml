@@ -19,7 +19,8 @@
 
 
     <!--weather-->
-    <dimen name="weather_card_margin">10dp</dimen>
+    <dimen name="weather_padding">5dp</dimen>
+    <dimen name="weather_card_margin">5dp</dimen>
     <dimen name="weather_card_padding">10dp</dimen>
     <dimen name="weather_card_space">10dp</dimen>
     <dimen name="weather_daily_height">60dp</dimen>

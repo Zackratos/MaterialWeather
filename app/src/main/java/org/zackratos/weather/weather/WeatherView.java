@@ -1,5 +1,6 @@
 package org.zackratos.weather.weather;
 
+import org.zackratos.weather.hewind.HeWeather;
 import org.zackratos.weather.hewind.HeWind;
 
 /**
@@ -8,7 +9,7 @@ import org.zackratos.weather.hewind.HeWind;
 
 public interface WeatherView {
 
-    void updateUI(HeWind heWind);
+    void updateUI(HeWeather weather);
 
     void updateFail(String message);
 }

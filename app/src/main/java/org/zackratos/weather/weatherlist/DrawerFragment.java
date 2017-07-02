@@ -9,7 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -54,6 +56,9 @@ public class DrawerFragment extends BaseFragment {
 
     @BindView(R.id.drawer_county_list)
     RecyclerView countyListView;
+
+    @BindView(R.id.drawer_header)
+    ImageView headerView;
 
 
     @OnClick(R.id.drawer_fab)
@@ -114,6 +119,8 @@ public class DrawerFragment extends BaseFragment {
                         updateUI(weathers);
                     }
                 });
+
+        Glide.with(this).load(Constants.Http.HE_WIND_ICON + "100.png").into(headerView);
 
     }
 

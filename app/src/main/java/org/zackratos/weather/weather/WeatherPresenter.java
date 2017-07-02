@@ -3,12 +3,16 @@ package org.zackratos.weather.weather;
 import android.util.Log;
 
 import org.zackratos.weather.HttpUtils;
+import org.zackratos.weather.hewind.HeWeather;
 import org.zackratos.weather.hewind.HeWind;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -30,36 +34,35 @@ public class WeatherPresenter {
 
 
     public void initWeather(String weatherId) {
-/*        HttpUtils.getHeWindApi()
-                .rxWeatherBody(HttpUtils.getHeWindMap(weatherId))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<ResponseBody>() {
-                    @Override
-                    public void accept(@NonNull ResponseBody responseBody) throws Exception {
-                        Log.d(TAG, "accept: " + responseBody.string());
-                    }
-                });*/
 
         HttpUtils.getHeWindApi()
                 .rxWeather(HttpUtils.getHeWindMap(weatherId))
                 .subscribeOn(Schedulers.io())
+                .flatMap(new Function<HeWind, ObservableSource<HeWeather>>() {
+                    @Override
+                    public ObservableSource<HeWeather> apply(@NonNull HeWind heWind) throws Exception {
+                        HeWeather heWeather = heWind.getHeWeathers().get(0);
+                        String status = heWeather.getStatus();
+                        if ("ok".equals(status)) {
+                            return Observable.just(heWeather);
+                        }
+                        return Observable.error(new Throwable(status));
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<HeWind>() {
+                .subscribe(new Observer<HeWeather>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
                         disposable = d;
                     }
 
                     @Override
-                    public void onNext(@NonNull HeWind heWind) {
-                        Log.d(TAG, "onNext: " + heWind.getHeWeathers().get(0).getNow().getCond().getTxt());
-                        view.updateUI(heWind);
+                    public void onNext(@NonNull HeWeather heWeather) {
+                        view.updateUI(heWeather);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.d(TAG, "onError: ");
                         view.updateFail(e.getMessage());
                     }
 
@@ -80,5 +83,11 @@ public class WeatherPresenter {
             disposable.dispose();
         }
     }
+
+
+    public void detach() {
+        view = null;
+    }
+
 
 }
