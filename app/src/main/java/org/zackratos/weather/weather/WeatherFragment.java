@@ -24,6 +24,7 @@ import org.zackratos.weather.hewind.HeWeather;
 import org.zackratos.weather.hewind.Now;
 import org.zackratos.weather.hewind.Suggestion;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -81,6 +82,8 @@ public class WeatherFragment extends BaseFragment implements WeatherView {
 
         callback.setName(weather.getCountyName());
 
+        callback.setNowInfo(null);
+
         presenter = new WeatherPresenter(this);
     }
 
@@ -106,7 +109,7 @@ public class WeatherFragment extends BaseFragment implements WeatherView {
         SwipeRefreshLayout.OnRefreshListener listener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                presenter.refreshWeather(weather.getWeatherId(), true);
             }
         };
 
@@ -120,6 +123,9 @@ public class WeatherFragment extends BaseFragment implements WeatherView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        refreshLayout.setRefreshing(false);
+        refreshLayout.destroyDrawingCache();
+        refreshLayout.clearAnimation();
         unbinder.unbind();
     }
 
@@ -158,6 +164,8 @@ public class WeatherFragment extends BaseFragment implements WeatherView {
 
     @Override
     public void updateUI(HeWeather weather) {
+
+        itemContainer.removeAllViews();
         callback.setNowInfo(weather.getNow());
         callback.setName(weather.getBasic().getCity());
         List<Daily> dailies = weather.getDailies();
@@ -207,7 +215,7 @@ public class WeatherFragment extends BaseFragment implements WeatherView {
 
 
 
-
+        refreshLayout.setRefreshing(false);
 
     }
 
@@ -216,6 +224,23 @@ public class WeatherFragment extends BaseFragment implements WeatherView {
 
     @Override
     public void updateFail(String message) {
+        refreshLayout.setRefreshing(false);
         SingleToast.getInstance(getActivity()).show(message);
+    }
+
+
+    @Override
+    public File cacheFile() {
+        File file = new File(getActivity().getExternalCacheDir(), "heWeather");
+        if (!file.exists()) {
+            file.mkdir();
+        } else {
+            if (!file.isDirectory()) {
+                file.delete();
+                file.mkdir();
+            }
+        }
+
+        return file;
     }
 }

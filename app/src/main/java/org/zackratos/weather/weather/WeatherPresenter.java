@@ -1,6 +1,5 @@
 package org.zackratos.weather.weather;
 
-import android.util.Log;
 
 import org.zackratos.weather.HttpUtils;
 import org.zackratos.weather.hewind.HeWeather;
@@ -14,6 +13,9 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import io.rx_cache2.DynamicKey;
+import io.rx_cache2.EvictDynamicKey;
+import io.rx_cache2.Reply;
 
 /**
  * Created by Administrator on 2017/6/27.
@@ -35,13 +37,22 @@ public class WeatherPresenter {
 
     public void initWeather(String weatherId) {
 
-        HttpUtils.getHeWindApi()
-                .rxWeather(HttpUtils.getHeWindMap(weatherId))
+        refreshWeather(weatherId, false);
+
+    }
+
+
+
+
+    public void refreshWeather(String weatherId, boolean update) {
+        HttpUtils.getHeWindCache(view.cacheFile())
+                .rxWeather(HttpUtils.getHeWindApi().rxWeather(HttpUtils.getHeWindMap(weatherId)),
+                        new DynamicKey(weatherId), new EvictDynamicKey(update))
                 .subscribeOn(Schedulers.io())
-                .flatMap(new Function<HeWind, ObservableSource<HeWeather>>() {
+                .flatMap(new Function<Reply<HeWind>, ObservableSource<HeWeather>>() {
                     @Override
-                    public ObservableSource<HeWeather> apply(@NonNull HeWind heWind) throws Exception {
-                        HeWeather heWeather = heWind.getHeWeathers().get(0);
+                    public ObservableSource<HeWeather> apply(@NonNull Reply<HeWind> heWindReply) throws Exception {
+                        HeWeather heWeather = heWindReply.getData().getHeWeathers().get(0);
                         String status = heWeather.getStatus();
                         if ("ok".equals(status)) {
                             return Observable.just(heWeather);
@@ -71,6 +82,7 @@ public class WeatherPresenter {
 
                     }
                 });
+
     }
 
 

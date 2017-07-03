@@ -1,6 +1,5 @@
 package org.zackratos.weather;
 
-import org.zackratos.weather.hewind.HeWeather;
 import org.zackratos.weather.hewind.HeWind;
 import org.zackratos.weather.hewind.now.HeNow;
 import org.zackratos.weather.hewind.srarch.HeSearch;

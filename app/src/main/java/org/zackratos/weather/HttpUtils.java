@@ -1,10 +1,14 @@
 package org.zackratos.weather;
 
 import org.zackratos.weather.Constants.Http;
+import org.zackratos.weather.hewind.HeWind;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.rx_cache2.internal.RxCache;
+import io.victoralbertos.jolyglot.GsonSpeaker;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -41,6 +45,14 @@ public class HttpUtils {
 
     public static HeWindApi getHeWindApi() {
         return getHeWindRetrofit().create(HeWindApi.class);
+    }
+
+    public static HeWindCache getHeWindCache(File dir) {
+
+        return new RxCache.Builder()
+                .persistence(dir, new GsonSpeaker())
+                .using(HeWindCache.class);
+
     }
 
 

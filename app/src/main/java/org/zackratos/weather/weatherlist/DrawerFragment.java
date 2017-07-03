@@ -17,9 +17,12 @@ import com.chad.library.adapter.base.BaseViewHolder;
 
 import org.litepal.crud.DataSupport;
 import org.zackratos.weather.BaseFragment;
+import org.zackratos.weather.BingApi;
 import org.zackratos.weather.Constants;
 import org.zackratos.weather.County;
+import org.zackratos.weather.HttpUtils;
 import org.zackratos.weather.R;
+import org.zackratos.weather.SPUitls;
 import org.zackratos.weather.SingleToast;
 import org.zackratos.weather.Weather;
 import org.zackratos.weather.addPlace.AddPlaceActivity;
@@ -40,6 +43,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
+import retrofit2.Retrofit;
 
 /**
  * Created by Administrator on 2017/6/17.
@@ -120,7 +125,41 @@ public class DrawerFragment extends BaseFragment {
                     }
                 });
 
-        Glide.with(this).load(Constants.Http.HE_WIND_ICON + "100.png").into(headerView);
+
+        Glide.with(this).load(SPUitls.getBingAdd(getActivity())).into(headerView);
+
+
+        HttpUtils.getRetrofit(Constants.Http.BING_PIC)
+                .create(BingApi.class)
+                .rxAddress()
+                .subscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, String>() {
+                    @Override
+                    public String apply(@NonNull ResponseBody responseBody) throws Exception {
+                        return responseBody.string();
+                    }
+                })
+                .doOnNext(new Consumer<String>() {
+                    @Override
+                    public void accept(@NonNull String s) throws Exception {
+                        SPUitls.putBingAdd(getActivity(), s);
+
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(@NonNull String s) throws Exception {
+                        Glide.with(DrawerFragment.this)
+                                .load(s)
+                                .into(headerView);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+
+                    }
+                });
 
     }
 
@@ -134,7 +173,6 @@ public class DrawerFragment extends BaseFragment {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     Weather weather = (Weather) adapter.getData().get(position);
-                    SingleToast.getInstance(getActivity()).show(weather.getCountyName());
                     for (Weather w : (List<Weather>)adapter.getData()) {
                         w.setChecked(false);
                     }

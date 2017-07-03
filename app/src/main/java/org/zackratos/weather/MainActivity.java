@@ -1,18 +1,26 @@
 package org.zackratos.weather;
 
+import android.annotation.TargetApi;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import org.zackratos.ultimatebar.UltimateBar;
 import org.zackratos.weather.hewind.Now;
 import org.zackratos.weather.weather.WeatherFragment;
 import org.zackratos.weather.weatherlist.DrawerFragment;
@@ -30,6 +38,15 @@ public class MainActivity extends BaseActivity implements WeatherFragment.Callba
     @BindView(R.id.main_name_view)
     TextView nameView;
 
+    @BindView(R.id.weather_container)
+    FrameLayout weatherContainer;
+
+    @BindView(R.id.main_coordinator)
+    CoordinatorLayout coordinator;
+
+    @BindView(R.id.main_drawer_view)
+    FrameLayout drawerView;
+
 //    @BindView(R.id.toolbar)
 //    private Toolbar toolbar;
 
@@ -38,10 +55,14 @@ public class MainActivity extends BaseActivity implements WeatherFragment.Callba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        UltimateBar ultimateBar = new UltimateBar(this);
-        ultimateBar.setColorBarForDrawer(ContextCompat.getColor(this, R.color.main));
+
 
         ButterKnife.bind(this);
+
+
+        setColorBarForDrawer(ContextCompat.getColor(this, R.color.main));
+
+
 
 
         Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
@@ -101,6 +122,54 @@ public class MainActivity extends BaseActivity implements WeatherFragment.Callba
         return super.onOptionsItemSelected(item);
     }
 
+
+
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    protected void setColorBarForDrawer(@ColorInt int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            ViewGroup decorView = (ViewGroup) window.getDecorView();
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            if (navigationBarExist()) {
+                option = option | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+            }
+            decorView.setSystemUiVisibility(option);
+            window.setNavigationBarColor(Color.TRANSPARENT);
+            window.setStatusBarColor(Color.TRANSPARENT);
+            decorView.addView(createStatusBarView(color), 0);
+            if (navigationBarExist()) {
+                decorView.addView(createNavBarView(color));
+                ViewGroup.MarginLayoutParams drawerParams = (ViewGroup.MarginLayoutParams)
+                        drawerView.getLayoutParams();
+                drawerParams.bottomMargin += getNavigationHeight();
+                drawerView.setLayoutParams(drawerParams);
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams)
+                        weatherContainer.getLayoutParams();
+                params.bottomMargin += getNavigationHeight();
+                weatherContainer.setLayoutParams(params);
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            ViewGroup decorView = (ViewGroup) window.getDecorView();
+            decorView.addView(createStatusBarView(color), 0);
+            if (navigationBarExist()) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+                decorView.addView(createNavBarView(color), 1);
+
+                ViewGroup.MarginLayoutParams drawerParams = (ViewGroup.MarginLayoutParams)
+                        drawerView.getLayoutParams();
+                drawerParams.bottomMargin += getNavigationHeight();
+                drawerView.setLayoutParams(drawerParams);
+            }
+        }
+    }
+
+
+
+
 /*    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -143,7 +212,10 @@ public class MainActivity extends BaseActivity implements WeatherFragment.Callba
 
     @Override
     public void setNowInfo(Now now) {
-
+        if (now == null) {
+            collapsingToolbar.setTitle("--");
+            return;
+        }
         collapsingToolbar.setTitle(now.getCond().getTxt() + "   " + now.getTmp() + "°");
     }
 }
