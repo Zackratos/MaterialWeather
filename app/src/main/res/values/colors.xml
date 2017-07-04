@@ -25,4 +25,7 @@
     <color name="add_place_search_item_county">@android:color/black</color>
 
 
+    <!--weather-->
+    <color name="weather_suggestion_title">@android:color/black</color>
+
 </resources>

@@ -3,6 +3,7 @@ package org.zackratos.weather.weather;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -16,11 +17,13 @@ import com.bumptech.glide.Glide;
 
 import org.litepal.crud.DataSupport;
 import org.zackratos.weather.BaseFragment;
+import org.zackratos.weather.Constants;
 import org.zackratos.weather.R;
 import org.zackratos.weather.SingleToast;
 import org.zackratos.weather.Weather;
 import org.zackratos.weather.hewind.Daily;
 import org.zackratos.weather.hewind.HeWeather;
+import org.zackratos.weather.hewind.Hourly;
 import org.zackratos.weather.hewind.Now;
 import org.zackratos.weather.hewind.Suggestion;
 
@@ -106,6 +109,7 @@ public class WeatherFragment extends BaseFragment implements WeatherView {
 
 
     private void initView() {
+        refreshLayout.setColorSchemeResources(R.color.main);
         SwipeRefreshLayout.OnRefreshListener listener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -168,6 +172,9 @@ public class WeatherFragment extends BaseFragment implements WeatherView {
         itemContainer.removeAllViews();
         callback.setNowInfo(weather.getNow());
         callback.setName(weather.getBasic().getCity());
+
+        addHour(weather);
+
         List<Daily> dailies = weather.getDailies();
         for (Daily daily : dailies) {
             CardView dailyView = (CardView) LayoutInflater.from(getActivity())
@@ -198,26 +205,71 @@ public class WeatherFragment extends BaseFragment implements WeatherView {
         }
 
 
-        Suggestion suggestion = weather.getSuggestion();
-
-
-        CardView suggestionView = (CardView) LayoutInflater.from(getActivity())
-                .inflate(R.layout.item_weather_suggestion, itemContainer, false);
-
-        TextView titleView = ButterKnife.findById(suggestionView, R.id.suggestion_title);
-        titleView.setText("舒适度指数");
-        TextView brfView = ButterKnife.findById(suggestionView, R.id.suggestion_brf);
-        brfView.setText(suggestion.getComf().getBrf());
-        TextView txtView = ButterKnife.findById(suggestionView, R.id.suggestion_txt);
-        txtView.setText(suggestion.getComf().getTxt());
-
-        itemContainer.addView(suggestionView);
-
-
+        addSuggestion(weather);
 
         refreshLayout.setRefreshing(false);
 
     }
+
+
+
+    private void addHour(HeWeather weather) {
+        List<Hourly> hourlies = weather.getHourlies();
+        if (hourlies == null || hourlies.size() == 0) {
+            return;
+        }
+
+        View view = LayoutInflater.from(getActivity())
+                .inflate(R.layout.item_weather_hour, itemContainer, false);
+        itemContainer.addView(view);
+        LinearLayout hourContainer = ButterKnife.findById(view, R.id.hour_container);
+
+        for (Hourly hourly : hourlies) {
+
+            CardView hourView = (CardView) LayoutInflater.from(getActivity())
+                    .inflate(R.layout.item_weather_hour_item, hourContainer, false);
+            TextView tempView = ButterKnife.findById(hourView, R.id.hour_temp);
+            tempView.setText(hourly.getTmp() + "°");
+            TextView timeView = ButterKnife.findById(hourView, R.id.hour_time);
+            timeView.setText(hourly.getDate().split(" ")[1]);
+            ImageView iconView = ButterKnife.findById(hourView, R.id.hour_icon);
+            Glide.with(this).load(HE_WIND_ICON + hourly.getCond().getCode() + ".png").into(iconView);
+
+            hourContainer.addView(hourView);
+        }
+    }
+
+
+    private void addSuggestion(HeWeather weather) {
+        Suggestion suggestion = weather.getSuggestion();
+
+        addSuggestionItem(suggestion.getComf(), R.string.weather_comf);
+        addSuggestionItem(suggestion.getCw(), R.string.weather_cw);
+        addSuggestionItem(suggestion.getDrsg(), R.string.weather_drsg);
+        addSuggestionItem(suggestion.getFlu(), R.string.weather_flu);
+        addSuggestionItem(suggestion.getSport(), R.string.weather_sport);
+        addSuggestionItem(suggestion.getTrav(), R.string.weather_trav);
+        addSuggestionItem(suggestion.getUv(), R.string.weather_uv);
+
+    }
+
+
+
+    private void addSuggestionItem(Suggestion.SuggestionBean bean, @StringRes int titleId) {
+        CardView suggestionView = (CardView) LayoutInflater.from(getActivity())
+                .inflate(R.layout.item_weather_suggestion, itemContainer, false);
+        TextView titleView = ButterKnife.findById(suggestionView, R.id.suggestion_title);
+        titleView.setText(getString(titleId));
+        TextView brfView = ButterKnife.findById(suggestionView, R.id.suggestion_brf);
+        brfView.setText(bean.getBrf());
+        TextView txtView = ButterKnife.findById(suggestionView, R.id.suggestion_txt);
+        txtView.setText(bean.getTxt());
+        itemContainer.addView(suggestionView);
+
+    }
+
+
+
 
 
 

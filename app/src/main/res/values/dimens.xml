@@ -24,5 +24,10 @@
     <dimen name="weather_card_padding">10dp</dimen>
     <dimen name="weather_card_space">10dp</dimen>
     <dimen name="weather_daily_height">60dp</dimen>
+    <dimen name="weather_hour_height">100dp</dimen>
+    <dimen name="weather_daily_icon">40dp</dimen>
+    <dimen name="weather_hour_icon">40dp</dimen>
+    <dimen name="weather_hour_width">60dp</dimen>
+    <dimen name="weather_suggestion_title">16sp</dimen>
 
 </resources>

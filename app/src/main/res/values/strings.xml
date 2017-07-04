@@ -13,4 +13,14 @@
     <string name="add_place_county">地区</string>
     <string name="add_place_get_place_fail">获取%s失败，请检查网络</string>
     <string name="add_place_refresh_fail">刷新失败，请检查网络</string>
+    
+    
+    <!--weather-->
+    <string name="weather_comf">舒适度指数</string>
+    <string name="weather_cw">洗车指数</string>
+    <string name="weather_drsg">穿衣指数</string>
+    <string name="weather_flu">感冒指数</string>
+    <string name="weather_sport">运动指数</string>
+    <string name="weather_trav">旅游指数</string>
+    <string name="weather_uv">紫外线指数</string>
 </resources>

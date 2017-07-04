@@ -1,8 +1,11 @@
 package org.zackratos.weather.weather;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,17 +23,16 @@ public class DailyDialog extends DialogFragment {
     }
 
 
-
-    @Nullable
+    @NonNull
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setTitle("sadjlkf")
+                .setView(R.layout.dialog_daily)
+                .create();
 
 
-        View view = inflater.inflate(R.layout.dialog_daily, container, false);
-
-        return view;
-
+        return dialog;
     }
 }
