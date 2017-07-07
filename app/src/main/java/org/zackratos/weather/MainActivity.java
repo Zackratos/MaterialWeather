@@ -27,9 +27,19 @@ import org.zackratos.weather.weatherlist.DrawerFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 
-public class MainActivity extends BaseActivity implements WeatherFragment.Callback, DrawerFragment.Callback {
+public class MainActivity extends BaseActivity implements
+        WeatherFragment.Callback, DrawerFragment.Callback {
 
 
     @BindView(R.id.main_collapsing)
@@ -77,16 +87,22 @@ public class MainActivity extends BaseActivity implements WeatherFragment.Callba
 
 
 
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
-
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.main_drawer_view, DrawerFragment.newInstance())
                 .commit();
 
 
+    }
+
+    private Disposable d;
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (d != null && !d.isDisposed()) {
+            d.dispose();
+        }
     }
 
     @Override
@@ -98,6 +114,7 @@ public class MainActivity extends BaseActivity implements WeatherFragment.Callba
             super.onBackPressed();
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -213,7 +230,7 @@ public class MainActivity extends BaseActivity implements WeatherFragment.Callba
     @Override
     public void setNowInfo(Now now) {
         if (now == null) {
-            collapsingToolbar.setTitle("--");
+            collapsingToolbar.setTitle(" ");
             return;
         }
         collapsingToolbar.setTitle(now.getCond().getTxt() + "   " + now.getTmp() + "°");

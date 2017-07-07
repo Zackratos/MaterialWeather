@@ -1,4 +1,4 @@
-package org.zackratos.weather.addPlace;
+package org.zackratos.weather;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -8,7 +8,7 @@ import org.litepal.crud.DataSupport;
  * Created by Administrator on 2017/6/19.
  */
 
-public abstract class Place extends DataSupport{
+public abstract class Place extends DataSupport {
 
     @SerializedName("sid")
     protected int id;

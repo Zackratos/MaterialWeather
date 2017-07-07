@@ -16,15 +16,15 @@ public interface PlaceApi {
 
 
     @GET("api/china")
-    Call<List<Province>> getProvincesCall();
+    Call<List<Province>> provinces();
 
     @GET("api/china/{provinceId}")
-    Call<List<City>> getCitiesCall(@Path("provinceId") int provinceId);
+    Call<List<City>> city(@Path("provinceId") int provinceId);
 
     @GET("api/china/{provinceId}/{cityId}")
-    Call<List<County>> getCountiesCall(@Path("provinceId") int provinceId, @Path("cityId") int cityId);
+    Call<List<County>> county(@Path("provinceId") int provinceId, @Path("cityId") int cityId);
 
 
     @GET("api/china")
-    Observable<List<Province>> getProvinces();
+    Observable<List<Province>> rxProvinces();
 }

@@ -8,12 +8,14 @@
 
 
     <!--add_place-->
+    <string name="add_place_label">添加城市</string>
     <string name="add_place_province">省份</string>
     <string name="add_place_city">城市</string>
     <string name="add_place_county">地区</string>
     <string name="add_place_get_place_fail">获取%s失败，请检查网络</string>
     <string name="add_place_refresh_fail">刷新失败，请检查网络</string>
-    
+
+
     
     <!--weather-->
     <string name="weather_comf">舒适度指数</string>
@@ -23,4 +25,17 @@
     <string name="weather_sport">运动指数</string>
     <string name="weather_trav">旅游指数</string>
     <string name="weather_uv">紫外线指数</string>
+
+    <string name="weather_now">实况天气</string>
+    <string name="weather_fl">体感温度：</string>
+    <string name="weather_hum">相对湿度</string>
+    <string name="weather_pcpn">降水量</string>
+    <string name="weather_pres">气压</string>
+    <string name="weather_tmp">温度</string>
+    <string name="weather_vis">能见度</string>
+
+    <string name="weather_wind">风力方向</string>
+    <string name="weather_deg">风向</string>
+
+
 </resources>

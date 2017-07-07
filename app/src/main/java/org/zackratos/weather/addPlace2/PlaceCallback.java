@@ -1,10 +1,9 @@
-package org.zackratos.weather.addPlace;
+package org.zackratos.weather.addPlace2;
 
 import android.support.v7.widget.RecyclerView;
 
-
 /**
- * Created by Administrator on 2017/7/8.
+ * Created by Administrator on 2017/6/24.
  */
 
 public interface PlaceCallback {
@@ -14,5 +13,4 @@ public interface PlaceCallback {
     void replaceFragment(PlaceFragment fragment);
 
     void addCounty(int countyId);
-
 }

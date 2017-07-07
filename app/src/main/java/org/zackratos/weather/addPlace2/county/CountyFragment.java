@@ -1,4 +1,4 @@
-package org.zackratos.weather.addPlace.county;
+package org.zackratos.weather.addPlace2.county;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,8 +10,8 @@ import org.zackratos.weather.HttpUtils;
 import org.zackratos.weather.PlaceApi;
 import org.zackratos.weather.R;
 import org.zackratos.weather.SingleToast;
-import org.zackratos.weather.addPlace.PlaceAdapter;
-import org.zackratos.weather.addPlace.PlaceFragment;
+import org.zackratos.weather.addPlace2.PlaceAdapter;
+import org.zackratos.weather.addPlace2.PlaceFragment;
 
 import java.util.List;
 
@@ -76,7 +76,7 @@ public class CountyFragment extends PlaceFragment<County> {
                 try {
                     List<County> counties = HttpUtils.getPlaceRetrofit()
                             .create(PlaceApi.class)
-                            .getCountiesCall(provinceId, cityId)
+                            .county(provinceId, cityId)
                             .execute().body();
 
                     updateUI(counties);
@@ -105,7 +105,7 @@ public class CountyFragment extends PlaceFragment<County> {
 //                        Thread.sleep(5000);
                         Retrofit retrofit = HttpUtils.getPlaceRetrofit();
                         PlaceApi api = retrofit.create(PlaceApi.class);
-                        List<County> mapCounties = api.getCountiesCall(provinceId, cityId)
+                        List<County> mapCounties = api.county(provinceId, cityId)
                                 .execute().body();
                         for (int i = 0; i < mapCounties.size(); i++) {
                             County county = mapCounties.get(i);

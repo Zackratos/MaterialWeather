@@ -1,4 +1,4 @@
-package org.zackratos.weather.addPlace;
+package org.zackratos.weather.addPlace2;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,6 +19,7 @@ import org.zackratos.weather.HeWindApi;
 import org.zackratos.weather.HttpUtils;
 import org.zackratos.weather.R;
 import org.zackratos.weather.SingleToast;
+import org.zackratos.weather.addPlace.ProvinceFragment;
 import org.zackratos.weather.hewind.srarch.HeSearch;
 import org.zackratos.weather.hewind.srarch.SearchBasic;
 import org.zackratos.weather.hewind.srarch.SearchHeWeather5;

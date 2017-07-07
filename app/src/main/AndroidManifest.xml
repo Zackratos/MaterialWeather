@@ -35,6 +35,7 @@
             </intent-filter>
         </activity>
         <activity android:name="org.zackratos.weather.addPlace.AddPlaceActivity"
+            android:label="@string/add_place_label"
             android:screenOrientation="portrait"
             android:parentActivityName="org.zackratos.weather.MainActivity"/>
 

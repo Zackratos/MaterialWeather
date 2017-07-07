@@ -1,4 +1,4 @@
-package org.zackratos.weather.addPlace;
+package org.zackratos.weather.addPlace2;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,10 +13,9 @@ import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
+import org.zackratos.weather.BaseFragment;
 import org.zackratos.weather.Place;
 import org.zackratos.weather.R;
-import org.zackratos.weather.mvp.MvpFragment;
-
 
 import java.util.List;
 
@@ -25,24 +24,23 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by Administrator on 2017/7/7.
+ * Created by Administrator on 2017/6/19.
  */
 
-public abstract class PlaceFragment<P extends Place> extends MvpFragment<PlaceContract.View, PlacePresenter<P>> implements PlaceContract.View<P> {
+public abstract class PlaceFragment<T extends Place> extends BaseFragment {
+
+
+    @BindView(R.id.place_refresh)
+    protected SwipeRefreshLayout refreshLayout;
+
+    @BindView(R.id.place_list)
+    protected RecyclerView placeListView;
 
 
     Unbinder unbinder;
 
+    protected PlaceCallback callback;
 
-
-    @BindView(R.id.place_refresh)
-    SwipeRefreshLayout refreshLayout;
-
-    @BindView(R.id.place_list)
-    RecyclerView placeListView;
-
-
-    private PlaceAdapter<P> adapter;
 
     @Override
     public void onAttach(Activity activity) {
@@ -55,63 +53,30 @@ public abstract class PlaceFragment<P extends Place> extends MvpFragment<PlaceCo
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_place, container, false);
-
+        View view = inflater.inflate(org.zackratos.weather.R.layout.fragment_place, container, false);
         unbinder = ButterKnife.bind(this, view);
-
-        initView();
-
-        presenter.initPlace();
-
-        return view;
-    }
-
-
-    private void initView() {
         refreshLayout.setColorSchemeResources(R.color.main);
-
-        placeListView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.refreshPlace();
+                refreshPlace();
             }
         });
-
+        placeListView.setLayoutManager(new LinearLayoutManager(getActivity()));
         placeListView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                presenter.clickItem(position);
+                PlaceFragment.this.onItemClick((PlaceAdapter<T>) adapter, position);
             }
         });
 
+
         callback.initLocateButton(placeListView);
+
+        queryPlace();
+        return view;
     }
 
-
-
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        refreshLayout.setRefreshing(false);
-        refreshLayout.destroyDrawingCache();
-        refreshLayout.clearAnimation();
-        unbinder.unbind();
-    }
-
-
-
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.cancelRequest();
-    }
 
 
     @Override
@@ -120,40 +85,31 @@ public abstract class PlaceFragment<P extends Place> extends MvpFragment<PlaceCo
         callback = null;
     }
 
+    protected abstract void onItemClick(PlaceAdapter<T> adapter, int position);
+
+    protected abstract void queryPlace();
+
+    protected abstract void refreshPlace();
 
 
-    protected PlaceCallback callback;
-
-
-
-
-
-    @Override
-    public void setPlaces(List<P> places) {
-
+    protected void updateUI(List<T> places) {
+        PlaceAdapter<T> adapter = (PlaceAdapter<T>) placeListView.getAdapter();
         if (adapter == null) {
             adapter = new PlaceAdapter<>(places);
-            adapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
+            placeListView.setAdapter(adapter);
         } else {
             adapter.setNewData(places);
             adapter.notifyDataSetChanged();
         }
 
-        if (placeListView.getAdapter() == null) {
-            placeListView.setAdapter(adapter);
-        }
-
-        if (refreshLayout.isRefreshing()) {
-            refreshLayout.setRefreshing(false);
-        }
     }
-
 
 
     @Override
-    public void refreshError(String msg) {
-        if (refreshLayout.isRefreshing()) {
-            refreshLayout.setRefreshing(false);
-        }
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
+
+
 }

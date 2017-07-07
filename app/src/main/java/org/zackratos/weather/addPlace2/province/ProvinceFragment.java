@@ -1,4 +1,4 @@
-package org.zackratos.weather.addPlace.province;
+package org.zackratos.weather.addPlace2.province;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,9 +10,9 @@ import org.zackratos.weather.PlaceApi;
 import org.zackratos.weather.Province;
 import org.zackratos.weather.R;
 import org.zackratos.weather.SingleToast;
-import org.zackratos.weather.addPlace.PlaceAdapter;
-import org.zackratos.weather.addPlace.PlaceFragment;
-import org.zackratos.weather.addPlace.city.CityFragment;
+import org.zackratos.weather.addPlace2.PlaceAdapter;
+import org.zackratos.weather.addPlace2.PlaceFragment;
+import org.zackratos.weather.addPlace2.city.CityFragment;
 
 import java.util.List;
 
@@ -48,6 +48,7 @@ public class ProvinceFragment extends PlaceFragment<Province> {
         super.onCreate(savedInstanceState);
         presenter = new ProvincePresenter(null);
 
+        getActivity().setTitle(R.string.add_place_label);
     }
 
 
@@ -78,7 +79,7 @@ public class ProvinceFragment extends PlaceFragment<Province> {
                             return provinces;
                         }
                         PlaceApi api = HttpUtils.getPlaceRetrofit().create(PlaceApi.class);
-                        List<Province> mapProvinces = api.getProvincesCall()
+                        List<Province> mapProvinces = api.provinces()
                                 .execute().body();
                         DataSupport.saveAll(mapProvinces);
                         return mapProvinces;
@@ -106,7 +107,7 @@ public class ProvinceFragment extends PlaceFragment<Province> {
     protected void refreshPlace() {
         HttpUtils.getPlaceRetrofit()
                 .create(PlaceApi.class)
-                .getProvinces()
+                .rxProvinces()
                 .subscribeOn(Schedulers.io())
                 .compose(this.<List<Province>>bindToLifecycle())
                 .flatMap(new Function<List<Province>, ObservableSource<Province>>() {

@@ -1,6 +1,5 @@
-package org.zackratos.weather.addPlace.city;
+package org.zackratos.weather.addPlace2.city;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -12,10 +11,9 @@ import org.zackratos.weather.PlaceApi;
 
 import org.zackratos.weather.R;
 import org.zackratos.weather.SingleToast;
-import org.zackratos.weather.addPlace.PlaceAdapter;
-import org.zackratos.weather.addPlace.PlaceCallback;
-import org.zackratos.weather.addPlace.PlaceFragment;
-import org.zackratos.weather.addPlace.county.CountyFragment;
+import org.zackratos.weather.addPlace2.PlaceAdapter;
+import org.zackratos.weather.addPlace2.PlaceFragment;
+import org.zackratos.weather.addPlace2.county.CountyFragment;
 
 
 import java.util.List;
@@ -53,6 +51,7 @@ public class CityFragment extends PlaceFragment<City> {
         super.onCreate(savedInstanceState);
         provinceId = getArguments().getInt(PROVINCE_ID, 0);
 
+        getActivity().setTitle("");
     }
 
 
@@ -84,7 +83,7 @@ public class CityFragment extends PlaceFragment<City> {
                         Retrofit retrofit = HttpUtils.getPlaceRetrofit();
                         PlaceApi api = retrofit.create(PlaceApi.class);
 
-                        List<City> mapCities = api.getCitiesCall(provinceId).execute().body();
+                        List<City> mapCities = api.city(provinceId).execute().body();
                         for (int i = 0; i < mapCities.size(); i++) {
                             City city = mapCities.get(i);
                             city.setProvinceId(provinceId);

@@ -1,4 +1,4 @@
-package org.zackratos.weather.addPlace.search;
+package org.zackratos.weather.addPlace2.search;
 
 import org.zackratos.weather.BaseFragment;
 

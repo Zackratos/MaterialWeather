@@ -23,7 +23,6 @@ import org.zackratos.weather.County;
 import org.zackratos.weather.HttpUtils;
 import org.zackratos.weather.R;
 import org.zackratos.weather.SPUitls;
-import org.zackratos.weather.SingleToast;
 import org.zackratos.weather.Weather;
 import org.zackratos.weather.addPlace.AddPlaceActivity;
 import org.zackratos.weather.hewind.srarch.SearchBasic;
@@ -44,7 +43,6 @@ import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
-import retrofit2.Retrofit;
 
 /**
  * Created by Administrator on 2017/6/17.
