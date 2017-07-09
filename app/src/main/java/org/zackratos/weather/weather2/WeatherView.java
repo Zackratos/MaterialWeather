@@ -1,7 +1,6 @@
-package org.zackratos.weather.weather;
+package org.zackratos.weather.weather2;
 
 import org.zackratos.weather.hewind.HeWeather;
-import org.zackratos.weather.hewind.HeWind;
 
 import java.io.File;
 

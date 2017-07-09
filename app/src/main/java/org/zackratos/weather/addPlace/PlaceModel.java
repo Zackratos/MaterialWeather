@@ -21,8 +21,19 @@ public abstract class PlaceModel<P extends Place> implements PlaceContract.Model
 
     protected abstract List<P> placesDB();
 
+    protected abstract List<P> placesLine();
 
-    protected abstract void updatePlaces();
+    protected abstract void savePlaces(List<P> places);
+
+
+    protected void updatePlaces() {
+        List<P> places = placesLine();
+        if (places == null) {
+            return;
+        }
+        savePlaces(places);
+        getPlacesDB();
+    }
 
 
     protected void getPlacesDB() {

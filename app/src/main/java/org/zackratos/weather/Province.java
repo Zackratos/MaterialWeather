@@ -20,4 +20,5 @@ public class Province extends Place {
     public void setCode(int code) {
         this.code = code;
     }
+
 }

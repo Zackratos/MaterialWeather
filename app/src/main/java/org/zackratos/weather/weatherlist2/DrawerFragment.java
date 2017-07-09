@@ -1,4 +1,4 @@
-package org.zackratos.weather.weatherlist;
+package org.zackratos.weather.weatherlist2;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,10 +22,9 @@ import org.zackratos.weather.Constants;
 import org.zackratos.weather.County;
 import org.zackratos.weather.HttpUtils;
 import org.zackratos.weather.R;
-import org.zackratos.weather.SPUitls;
+import org.zackratos.weather.SPUtils;
 import org.zackratos.weather.Weather;
 import org.zackratos.weather.addPlace.AddPlaceActivity;
-import org.zackratos.weather.hewind.srarch.SearchBasic;
 
 import java.util.List;
 
@@ -40,7 +39,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
@@ -64,10 +62,10 @@ public class DrawerFragment extends BaseFragment {
     ImageView headerView;
 
 
+
     @OnClick(R.id.drawer_fab)
     void onFabClick() {
         startActivityForResult(AddPlaceActivity.newIntent(getActivity()), Constants.Drawer.REQUEST_CODE);
-
     }
 
 
@@ -124,7 +122,7 @@ public class DrawerFragment extends BaseFragment {
                 });
 
 
-        Glide.with(this).load(SPUitls.getBingAdd(getActivity())).into(headerView);
+        Glide.with(this).load(SPUtils.getBingAdd(getActivity())).into(headerView);
 
 
         HttpUtils.getRetrofit(Constants.Http.BING_PIC)
@@ -140,7 +138,7 @@ public class DrawerFragment extends BaseFragment {
                 .doOnNext(new Consumer<String>() {
                     @Override
                     public void accept(@NonNull String s) throws Exception {
-                        SPUitls.putBingAdd(getActivity(), s);
+                        SPUtils.putBingAdd(getActivity(), s);
 
                     }
                 })
@@ -170,13 +168,7 @@ public class DrawerFragment extends BaseFragment {
             adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    Weather weather = (Weather) adapter.getData().get(position);
-                    for (Weather w : (List<Weather>)adapter.getData()) {
-                        w.setChecked(false);
-                    }
-                    callback.switchWeather(weather.getId());
-                    weather.setChecked(true);
-                    adapter.notifyDataSetChanged();
+
                 }
             });
         } else {
@@ -277,7 +269,9 @@ public class DrawerFragment extends BaseFragment {
 
 
     private void addLocateWeather(Intent intent) {
-        Observable.just(intent)
+
+
+/*        Observable.just(intent)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<Intent, SearchBasic>() {
                     @Override
@@ -320,7 +314,7 @@ public class DrawerFragment extends BaseFragment {
                     public void accept(@NonNull Throwable throwable) throws Exception {
 
                     }
-                });
+                });*/
 
     }
 
@@ -341,8 +335,7 @@ public class DrawerFragment extends BaseFragment {
 
         @Override
         protected void convert(BaseViewHolder helper, Weather item) {
-            helper.setText(R.id.drawer_item_name, item.getCountyName())
-                    .setChecked(R.id.drawer_item_name, item.isChecked());
+            helper.setText(R.id.drawer_item_name, item.getCountyName());
         }
     }
 

@@ -15,6 +15,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import org.zackratos.weather.Place;
 import org.zackratos.weather.R;
+import org.zackratos.weather.SingleToast;
 import org.zackratos.weather.mvp.MvpFragment;
 
 
@@ -28,7 +29,7 @@ import butterknife.Unbinder;
  * Created by Administrator on 2017/7/7.
  */
 
-public abstract class PlaceFragment<P extends Place> extends MvpFragment<PlaceContract.View, PlacePresenter<P>> implements PlaceContract.View<P> {
+public abstract class PlaceFragment<P extends Place> extends MvpFragment<PlaceContract.View, PlaceContract.Presenter> implements PlaceContract.View<P> {
 
 
     Unbinder unbinder;
@@ -128,6 +129,9 @@ public abstract class PlaceFragment<P extends Place> extends MvpFragment<PlaceCo
 
 
 
+
+
+
     @Override
     public void setPlaces(List<P> places) {
 
@@ -150,10 +154,14 @@ public abstract class PlaceFragment<P extends Place> extends MvpFragment<PlaceCo
 
 
 
+
+
     @Override
     public void refreshError(String msg) {
         if (refreshLayout.isRefreshing()) {
             refreshLayout.setRefreshing(false);
         }
+
+        SingleToast.getInstance(getActivity()).show(msg);
     }
 }

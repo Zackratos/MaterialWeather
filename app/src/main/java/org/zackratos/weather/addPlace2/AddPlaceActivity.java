@@ -142,7 +142,7 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.weather_container, ProvinceFragment.newInstance())
+                .add(R.id.place_container, ProvinceFragment.newInstance())
                 .commit();
 
     }
@@ -190,7 +190,7 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
     public void replaceFragment(PlaceFragment fragment) {
         getSupportFragmentManager().beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.weather_container, fragment)
+                .replace(R.id.place_container, fragment)
                 .commit();
     }
 

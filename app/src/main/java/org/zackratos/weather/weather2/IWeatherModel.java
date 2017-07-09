@@ -1,4 +1,4 @@
-package org.zackratos.weather.weather;
+package org.zackratos.weather.weather2;
 
 import org.zackratos.weather.hewind.HeWeather;
 

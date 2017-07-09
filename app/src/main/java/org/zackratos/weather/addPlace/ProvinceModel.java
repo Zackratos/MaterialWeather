@@ -1,8 +1,11 @@
 package org.zackratos.weather.addPlace;
 
 
+import android.content.ContentValues;
+
 import org.litepal.crud.DataSupport;
 import org.zackratos.weather.HttpUtils;
+import org.zackratos.weather.Place;
 import org.zackratos.weather.PlaceApi;
 import org.zackratos.weather.Province;
 
@@ -23,6 +26,7 @@ public class ProvinceModel extends PlaceModel<Province> {
     }
 
 
+    @Override
     protected List<Province> placesLine() {
         call = HttpUtils.getPlaceRetrofit()
                 .create(PlaceApi.class)
@@ -39,6 +43,20 @@ public class ProvinceModel extends PlaceModel<Province> {
 
 
     @Override
+    protected void savePlaces(List<Province> places) {
+        for (Province province : places) {
+            List<Province> ps = DataSupport.select("id")
+                    .where("code = ?", String.valueOf(province.getCode()))
+                    .find(Province.class);
+
+            if (ps == null || ps.isEmpty()) {
+                province.save();
+            }
+        }
+    }
+
+
+    /*    @Override
     protected void updatePlaces() {
         List<Province> provinces = placesLine();
 
@@ -57,7 +75,7 @@ public class ProvinceModel extends PlaceModel<Province> {
         }
 
         getPlacesDB();
-    }
+    }*/
 
 
 

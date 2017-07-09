@@ -5,9 +5,7 @@
     android:id="@+id/drawer_item_name"
     android:layout_width="match_parent"
     android:layout_height="@dimen/drawer_item_height"
-    android:background="@drawable/bg_drawer_item"
     android:paddingLeft="@dimen/drawer_item_padding"
-    android:textSize="@dimen/drawer_item_text"
-    android:button="@null">
+    android:textSize="@dimen/drawer_item_text">
 
 </RadioButton>

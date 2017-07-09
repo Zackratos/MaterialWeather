@@ -27,14 +27,14 @@ public abstract class SingleFragmentActivity extends BaseActivity{
         FragmentManager fm = getSupportFragmentManager();
 
         Fragment fragment = fm
-                .findFragmentById(R.id.weather_container);
+                .findFragmentById(R.id.place_container);
 
         if (fragment == null) {
             fragment = createFragment();
         }
 
         fm.beginTransaction()
-                .add(R.id.weather_container, fragment)
+                .add(R.id.place_container, fragment)
                 .commit();
 
     }

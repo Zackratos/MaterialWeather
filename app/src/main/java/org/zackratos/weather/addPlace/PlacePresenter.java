@@ -29,14 +29,14 @@ public class PlacePresenter<P extends Place> extends PlaceContract.Presenter {
 
     private AsyncTask<Void, Void, List<P>> a;
 
-    private PlaceContract.View view;
 
     private PlaceContract.Model model;
 
 
-    public PlacePresenter(PlaceContract.View view, PlaceContract.Model model) {
-        this.view = view;
+    public PlacePresenter (PlaceContract.Model model) {
+
         this.model = model;
+
     }
 
 
@@ -57,6 +57,8 @@ public class PlacePresenter<P extends Place> extends PlaceContract.Presenter {
                 Log.d(TAG, "onPostExecute: ");
                 if (ps != null) {
                     view.setPlaces(ps);
+                } else {
+                    view.refreshError(null);
                 }
             }
         };

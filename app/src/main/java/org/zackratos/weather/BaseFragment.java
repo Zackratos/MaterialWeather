@@ -8,6 +8,5 @@ import com.trello.rxlifecycle2.components.support.RxFragment;
 
 public class BaseFragment extends RxFragment {
 
-
-    public static String TAG = "TAG";
+    protected static final String TAG = "TAG";
 }

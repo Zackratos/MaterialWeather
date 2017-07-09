@@ -1,8 +1,14 @@
 package org.zackratos.weather.addPlace;
 
 
-import org.zackratos.weather.Province;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
+import org.zackratos.weather.Province;
+import org.zackratos.weather.R;
 
 
 /**
@@ -18,17 +24,30 @@ public class ProvinceFragment extends PlaceFragment<Province> {
     }
 
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        getActivity().setTitle(R.string.add_place_label);
+
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
 
     @Override
-    protected PlacePresenter<Province> getPresenter() {
-        return new PlacePresenter<>(this, new ProvinceModel());
+    protected PlaceContract.Presenter getPresenter() {
+        return new PlacePresenter<Province>(new ProvinceModel());
     }
+
+
+
 
 
 
 
     @Override
     public void onItemClick(Province place) {
-        callback.replaceFragment(CityFragment.newInstance(place.getCode()));
+        callback.replaceFragment(CityFragment.newInstance(place.getId()));
     }
 }

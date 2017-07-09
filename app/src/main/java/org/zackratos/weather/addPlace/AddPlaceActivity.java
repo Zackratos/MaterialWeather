@@ -1,30 +1,41 @@
 package org.zackratos.weather.addPlace;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.melnykov.fab.FloatingActionButton;
 
+import org.litepal.crud.DataSupport;
 import org.zackratos.ultimatebar.UltimateBar;
 import org.zackratos.weather.BaseActivity;
+import org.zackratos.weather.City;
+import org.zackratos.weather.Constants;
+import org.zackratos.weather.County;
 import org.zackratos.weather.HeWindApi;
 import org.zackratos.weather.HttpUtils;
 import org.zackratos.weather.R;
+import org.zackratos.weather.SPUtils;
 import org.zackratos.weather.SingleToast;
+import org.zackratos.weather.Weather;
 import org.zackratos.weather.hewind.srarch.HeSearch;
 import org.zackratos.weather.hewind.srarch.SearchBasic;
 import org.zackratos.weather.hewind.srarch.SearchHeWeather5;
 import org.zackratos.xmaplocation.LocateListener;
 import org.zackratos.xmaplocation.Location;
 import org.zackratos.xmaplocation.XMapLocation;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +46,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
@@ -50,8 +62,27 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
     @BindView(R.id.add_place_locate)
     FloatingActionButton locateButton;
 
+
+    private ProgressDialog dialog;
+
     @OnClick(R.id.add_place_locate)
     void onLocateClick() {
+        initDialog();
+        dialog.show();
+        locate();
+    }
+
+
+    private void initDialog() {
+        if (dialog == null) {
+            dialog = new ProgressDialog(this);
+        }
+    }
+
+
+
+    private void locate() {
+
         XMapLocation.newBuilder(this)
                 .build()
                 .locate(new LocateListener() {
@@ -62,14 +93,20 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
                                     .show(location.getErrorInfo());
                             return;
                         }
-                        Log.d(TAG, "onLocated: " + location.getAddress());
+
                         locateSuccess(location);
                     }
                 });
     }
 
 
+
+
     private Disposable disposable;
+
+
+
+    private static final String WEATHER_SID = "weather_sid";
 
 
     private void locateSuccess(Location location) {
@@ -89,7 +126,20 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
                         return Observable.error(new Throwable(status));
                     }
                 })
-                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<SearchBasic>() {
+                    @Override
+                    public void accept(@NonNull SearchBasic searchBasic) throws Exception {
+//                        ContentValues values = new ContentValues();
+//                        values.put("checked", false);
+//                        DataSupport.updateAll(Weather.class, values, "weatherid != ?", searchBasic.getId());
+                        Weather weather = new Weather.Builder()
+                                .weatherId(searchBasic.getId())
+                                .countyName(searchBasic.getCity())
+                                .build();
+                        weather.saveOrUpdate("weatherid = ?", searchBasic.getId());
+                        SPUtils.putWeatherId(AddPlaceActivity.this, searchBasic.getId());
+                    }
+                })
                 .subscribe(new Observer<SearchBasic>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
@@ -98,10 +148,7 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
 
                     @Override
                     public void onNext(@NonNull SearchBasic searchBasic) {
-                        Intent intent = new Intent();
-                        intent.putExtra(AddPlace.EXTRA_BASIC, searchBasic);
-                        setResult(AddPlace.LOCATE_RESULT, intent);
-                        finish();
+
                     }
 
                     @Override
@@ -112,9 +159,12 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
 
                     @Override
                     public void onComplete() {
-
+                        dialog.dismiss();
+                        setResult(AddPlace.LOCATE_RESULT);
+                        finish();
                     }
                 });
+
 
     }
 
@@ -133,6 +183,15 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
 
         ButterKnife.bind(this);
 
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT && navigationBarExist()) {
+            FrameLayout placeContainer = ButterKnife.findById(this, R.id.place_container);
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) placeContainer.getLayoutParams();
+            params.bottomMargin = getNavigationHeight();
+            placeContainer.setLayoutParams(params);
+        }
+
+
+
         Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
 
         setSupportActionBar(toolbar);
@@ -141,16 +200,20 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.weather_container, ProvinceFragment.newInstance())
+                .add(R.id.place_container, ProvinceFragment.newInstance())
                 .commit();
 
     }
 
 
+
+
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (disposable != null) {
+        if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
         }
     }
@@ -168,11 +231,19 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
     }
 
 
+    private static final String COUNTY_ID = "county_id";
 
     public static int getCountyId(Intent intent) {
 
-        return intent.getIntExtra(AddPlace.COUNTY_ID, 0);
+        return intent.getIntExtra(COUNTY_ID, 0);
     }
+
+
+
+    public static int getWeatherSid(Intent intent) {
+        return intent.getIntExtra(WEATHER_SID, 1);
+    }
+
 
 
     public static String getWeatherId(Intent intent) {
@@ -185,11 +256,17 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
 
 
 
+
+
+
+
+
+
     @Override
     public void replaceFragment(PlaceFragment fragment) {
         getSupportFragmentManager().beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.weather_container, fragment)
+                .replace(R.id.place_container, fragment)
                 .commit();
     }
 
@@ -201,12 +278,85 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
     }
 
 
+
+
     @Override
-    public void addCounty(int countyId) {
-        Intent intent = new Intent();
-        intent.putExtra(AddPlace.COUNTY_ID, countyId);
-        setResult(Activity.RESULT_OK, intent);
-        finish();
+    public void addCounty(County county) {
+
+        Observable.just(county)
+                .subscribeOn(Schedulers.io())
+                .doOnNext(new Consumer<County>() {
+                    @Override
+                    public void accept(@NonNull County county) throws Exception {
+                        Weather weather = new Weather.Builder()
+                                .weatherId(county.getWeatherId())
+                                .countyName(county.getName())
+                                .build();
+                        weather.saveOrUpdate("weatherid = ?", county.getWeatherId());
+                        SPUtils.putWeatherId(AddPlaceActivity.this, county.getWeatherId());
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<County>() {
+                    @Override
+                    public void accept(@NonNull County county) throws Exception {
+                        setResult(AddPlace.SELECT_RESULT);
+                        finish();
+                    }
+                });
+
+
+/*        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Weather weather = new Weather.Builder()
+                        .weatherId(county.getWeatherId())
+                        .countyName(county.getName())
+                        .build();
+                weather.saveOrUpdate("weatherid = ?", county.getWeatherId());
+                SPUtils.putWeatherId(AddPlaceActivity.this, county.getWeatherId());
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setResult(AddPlace.SELECT_RESULT);
+                        finish();
+                    }
+                });
+            }
+        }).start();*/
+
+
+
+
+
+/*        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                ContentValues values = new ContentValues();
+                values.put("checked", false);
+                DataSupport.updateAll(Weather.class, values, "weatherid != ?", county.getWeatherId());
+
+                Weather weather = new Weather.Builder()
+                        .checked(true)
+                        .countyName(county.getName())
+                        .weatherId(county.getWeatherId())
+                        .build();
+                weather.saveOrUpdate("weatherid = ?", county.getWeatherId());
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                        setResult(AddPlace.SELECT_RESULT);
+                        finish();
+                    }
+                });
+            }
+        }).start();*/
+
+
     }
 
 }

@@ -6,10 +6,6 @@ package org.zackratos.weather;
 
 public class Constants {
 
-    public static final class SP {
-        public static final String BING_ADDRESS = "bing_address";
-    }
-
 
 
     public static final class Http {
@@ -33,6 +29,7 @@ public class Constants {
         public static final String WEATHER_ID = "weather_id";
         public static final String EXTRA_BASIC = "basic";
         public static final int LOCATE_RESULT = 1;
+        public static final int SELECT_RESULT = 2;
     }
 
 

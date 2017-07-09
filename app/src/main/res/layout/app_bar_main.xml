@@ -54,7 +54,7 @@
 
 
     <FrameLayout
-        android:id="@+id/weather_container"
+        android:id="@+id/place_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"

@@ -32,7 +32,7 @@ public class CityModel extends PlaceModel<City> {
     }
 
 
-
+    @Override
     protected List<City> placesLine() {
         Log.d("TAG", "placesLine: ");
         call = HttpUtils.getPlaceRetrofit()
@@ -40,7 +40,6 @@ public class CityModel extends PlaceModel<City> {
                 .city(provinceId);
         try {
             List<City> cities = call.execute().body();
-            Log.d("TAG", "placesLine: " + cities.size());
             return cities;
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,6 +51,20 @@ public class CityModel extends PlaceModel<City> {
 
 
     @Override
+    protected void savePlaces(List<City> places) {
+        for (City city : places) {
+            List<City> cs = DataSupport.select("id")
+                    .where("code = ?", String.valueOf(city.getCode()))
+                    .find(City.class);
+            if (cs == null || cs.isEmpty()) {
+                city.setProvinceId(provinceId);
+                city.save();
+            }
+        }
+    }
+
+
+    /*    @Override
     protected void updatePlaces() {
         List<City> cities = placesLine();
 
@@ -70,27 +83,6 @@ public class CityModel extends PlaceModel<City> {
         }
 
         getPlacesDB();
-    }
-
-
-    /*    @Override
-    public List<City> refreshPlaces() {
-
-        List<City> cities = placesLine();
-
-        for (City city : cities) {
-            List<City> cs = DataSupport.select("id")
-                    .where("code = ?", String.valueOf(city.getCode()))
-                    .find(City.class);
-            if (cs == null || cs.isEmpty()) {
-                city.setProvinceId(provinceId);
-                city.save();
-            }
-
-        }
-        getPlacesDB();
-
-        return places;
     }*/
 
 
