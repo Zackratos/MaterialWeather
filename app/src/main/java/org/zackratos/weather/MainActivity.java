@@ -20,7 +20,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import org.zackratos.weather.hewind.Now;
 import org.zackratos.weather.weather.Weather;
@@ -54,8 +57,10 @@ public class MainActivity extends BaseActivity implements
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
 
-//    @BindView(R.id.toolbar)
-//    private Toolbar toolbar;
+
+    @BindView(R.id.main_background)
+    ImageView backgroundView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +93,10 @@ public class MainActivity extends BaseActivity implements
                 .add(R.id.main_drawer_view, WeatherListFragment.newInstance())
                 .commit();
 
+
+        Glide.with(this)
+                .load("https://raw.githubusercontent.com/Zackratos/MaterialWeather/master/background/100.jpg")
+                .into(backgroundView);
 
     }
 

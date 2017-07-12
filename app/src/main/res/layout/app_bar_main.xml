@@ -24,8 +24,9 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
+                android:id="@+id/main_background"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="213dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/test"
                 android:fitsSystemWindows="true"
