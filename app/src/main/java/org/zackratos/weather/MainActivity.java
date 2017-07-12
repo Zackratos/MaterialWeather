@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity implements
 
 
         Glide.with(this)
-                .load("https://raw.githubusercontent.com/Zackratos/MaterialWeather/master/background/100.jpg")
+                .load("https://raw.githubusercontent.com/Zackratos/MaterialWeather/master/background/999.jpg")
                 .into(backgroundView);
 
     }
