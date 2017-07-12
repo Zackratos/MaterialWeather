@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.litepal.crud.DataSupport;
-import org.zackratos.weather.City;
-import org.zackratos.weather.Province;
 
 /**
  * Created by Administrator on 2017/7/8.

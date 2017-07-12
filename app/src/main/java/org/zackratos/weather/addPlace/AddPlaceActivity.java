@@ -1,8 +1,6 @@
 package org.zackratos.weather.addPlace;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -17,18 +15,14 @@ import android.widget.FrameLayout;
 
 import com.melnykov.fab.FloatingActionButton;
 
-import org.litepal.crud.DataSupport;
 import org.zackratos.ultimatebar.UltimateBar;
 import org.zackratos.weather.BaseActivity;
-import org.zackratos.weather.City;
-import org.zackratos.weather.Constants;
-import org.zackratos.weather.County;
-import org.zackratos.weather.HeWindApi;
+import org.zackratos.weather.weather.HeWindApi;
 import org.zackratos.weather.HttpUtils;
 import org.zackratos.weather.R;
 import org.zackratos.weather.SPUtils;
 import org.zackratos.weather.SingleToast;
-import org.zackratos.weather.Weather;
+import org.zackratos.weather.weather.Weather;
 import org.zackratos.weather.hewind.srarch.HeSearch;
 import org.zackratos.weather.hewind.srarch.SearchBasic;
 import org.zackratos.weather.hewind.srarch.SearchHeWeather5;

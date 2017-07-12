@@ -1,13 +1,8 @@
 package org.zackratos.weather.addPlace;
 
 
-import android.content.ContentValues;
-
 import org.litepal.crud.DataSupport;
 import org.zackratos.weather.HttpUtils;
-import org.zackratos.weather.Place;
-import org.zackratos.weather.PlaceApi;
-import org.zackratos.weather.Province;
 
 import java.io.IOException;
 import java.util.List;

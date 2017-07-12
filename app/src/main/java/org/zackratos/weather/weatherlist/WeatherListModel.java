@@ -1,18 +1,17 @@
 package org.zackratos.weather.weatherlist;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.litepal.crud.DataSupport;
-import org.zackratos.weather.BingApi;
-import org.zackratos.weather.Constants;
 import org.zackratos.weather.HttpUtils;
 import org.zackratos.weather.SPUtils;
-import org.zackratos.weather.Weather;
+import org.zackratos.weather.weather.Weather;
+import org.zackratos.weather.hewind.srarch.SearchBasic;
 
 import java.io.IOException;
 import java.util.List;
 
+import io.reactivex.disposables.Disposable;
 import okhttp3.ResponseBody;
 
 /**
@@ -29,6 +28,35 @@ public class WeatherListModel implements WeatherListContract.Model {
     public WeatherListModel(Context context) {
         this.context = context;
     }
+
+
+    @Override
+    public void saveLocation(SearchBasic searchBasic) {
+        Weather weather = new Weather.Builder()
+                .weatherId(searchBasic.getId())
+                .countyName(searchBasic.getCity())
+                .build();
+        weather.saveOrUpdate("weatherid = ?", searchBasic.getId());
+        SPUtils.putWeatherId(context, searchBasic.getId());
+    }
+
+
+    private Disposable disposable;
+
+
+    @Override
+    public void setDisposable(Disposable disposable) {
+        this.disposable = disposable;
+
+    }
+
+    @Override
+    public void dispose() {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
+    }
+
 
 
     @Override
@@ -55,7 +83,7 @@ public class WeatherListModel implements WeatherListContract.Model {
     public String getHeaderUrl() {
 
         try {
-            ResponseBody body = HttpUtils.getRetrofit(Constants.Http.BING_PIC)
+            ResponseBody body = HttpUtils.getRetrofit(BingApi.BING_PIC)
                     .create(BingApi.class)
                     .address().execute().body();
             if (body != null) {

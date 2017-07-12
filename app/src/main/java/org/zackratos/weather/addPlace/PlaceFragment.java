@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
-import org.zackratos.weather.Place;
 import org.zackratos.weather.R;
 import org.zackratos.weather.SingleToast;
 import org.zackratos.weather.mvp.MvpFragment;

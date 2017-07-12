@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import org.litepal.crud.DataSupport;
-import org.zackratos.weather.City;
+import org.zackratos.weather.addPlace.City;
 
 import org.zackratos.weather.HttpUtils;
-import org.zackratos.weather.PlaceApi;
+import org.zackratos.weather.addPlace.PlaceApi;
 
 import org.zackratos.weather.R;
 import org.zackratos.weather.SingleToast;

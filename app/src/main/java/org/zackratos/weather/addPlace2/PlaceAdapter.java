@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import org.zackratos.weather.Place;
+import org.zackratos.weather.addPlace.Place;
 import org.zackratos.weather.R;
 
 import java.util.List;

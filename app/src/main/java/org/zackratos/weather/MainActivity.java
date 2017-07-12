@@ -23,7 +23,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.zackratos.weather.hewind.Now;
-import org.zackratos.weather.weather2.WeatherFragment;
+import org.zackratos.weather.weather.Weather;
+import org.zackratos.weather.weather.WeatherFragment;
 import org.zackratos.weather.weatherlist.WeatherListFragment;
 
 import butterknife.BindView;
@@ -219,11 +220,12 @@ public class MainActivity extends BaseActivity implements
 
 
     @Override
-    public void onWeatherChecked(String weatherId) {
+    public void onWeatherChecked(Weather weather) {
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.place_container, WeatherFragment.newInstance(weatherId))
+                .replace(R.id.place_container, WeatherFragment.newInstance(weather.getWeatherId()))
                 .commit();
+        nameView.setText(weather.getCountyName());
 
     }
 
@@ -238,18 +240,18 @@ public class MainActivity extends BaseActivity implements
 
 
 
+
     @Override
     public void setName(String name) {
         nameView.setText(name);
     }
 
-
     @Override
     public void setNowInfo(Now now) {
         if (now == null) {
             collapsingToolbar.setTitle(" ");
-            return;
         }
-        collapsingToolbar.setTitle(now.getCond().getTxt() + "   " + now.getTmp() + "°");
+        collapsingToolbar.setTitle(now.getCond().getTxt() + " " + now.getTmp() + "°");
     }
+
 }

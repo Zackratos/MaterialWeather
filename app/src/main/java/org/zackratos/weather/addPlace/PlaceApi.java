@@ -1,4 +1,4 @@
-package org.zackratos.weather;
+package org.zackratos.weather.addPlace;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ import retrofit2.http.Path;
 
 public interface PlaceApi {
 
+    public static final String PLACE_URL = "http://guolin.tech/";
 
 
     @GET("api/china")

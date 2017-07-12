@@ -9,15 +9,11 @@ public class Constants {
 
 
     public static final class Http {
-        public static final String PLACE_URL = "http://guolin.tech/";
 
-        public static final String SENIVERSE_URL = "https://api.seniverse.com/v3/";
 
         public static final String HE_WIND_URL = "https://free-api.heweather.com/v5/";
 
         public static final String HE_WIND_ICON = "https://cdn.heweather.com/cond_icon/";
-
-        public static final String BING_PIC = "http://guolin.tech/";
 
     }
 

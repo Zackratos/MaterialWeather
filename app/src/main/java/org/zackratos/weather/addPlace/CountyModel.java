@@ -1,10 +1,7 @@
 package org.zackratos.weather.addPlace;
 
 import org.litepal.crud.DataSupport;
-import org.zackratos.weather.City;
-import org.zackratos.weather.County;
 import org.zackratos.weather.HttpUtils;
-import org.zackratos.weather.PlaceApi;
 
 import java.io.IOException;
 import java.util.List;

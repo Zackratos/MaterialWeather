@@ -17,13 +17,13 @@ import com.chad.library.adapter.base.BaseViewHolder;
 
 import org.litepal.crud.DataSupport;
 import org.zackratos.weather.BaseFragment;
-import org.zackratos.weather.BingApi;
+import org.zackratos.weather.weatherlist.BingApi;
 import org.zackratos.weather.Constants;
-import org.zackratos.weather.County;
+import org.zackratos.weather.addPlace.County;
 import org.zackratos.weather.HttpUtils;
 import org.zackratos.weather.R;
 import org.zackratos.weather.SPUtils;
-import org.zackratos.weather.Weather;
+import org.zackratos.weather.weather.Weather;
 import org.zackratos.weather.addPlace.AddPlaceActivity;
 
 import java.util.List;
@@ -125,7 +125,7 @@ public class DrawerFragment extends BaseFragment {
         Glide.with(this).load(SPUtils.getBingAdd(getActivity())).into(headerView);
 
 
-        HttpUtils.getRetrofit(Constants.Http.BING_PIC)
+        HttpUtils.getRetrofit(BingApi.BING_PIC)
                 .create(BingApi.class)
                 .rxAddress()
                 .subscribeOn(Schedulers.io())

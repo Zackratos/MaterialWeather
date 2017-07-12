@@ -28,14 +28,17 @@
 
     <string name="weather_now">实况天气</string>
     <string name="weather_fl">体感温度：</string>
-    <string name="weather_hum">相对湿度</string>
-    <string name="weather_pcpn">降水量</string>
-    <string name="weather_pres">气压</string>
-    <string name="weather_tmp">温度</string>
-    <string name="weather_vis">能见度</string>
+    <string name="weather_hum">相对湿度：</string>
+    <string name="weather_pcpn">降水量：</string>
+    <string name="weather_pres">气压：</string>
+    <string name="weather_tmp">温度：</string>
+    <string name="weather_vis">能见度：</string>
 
     <string name="weather_wind">风力方向</string>
-    <string name="weather_deg">风向</string>
+    <string name="weather_deg">风向：</string>
+    <string name="weather_dir">风向：</string>
+    <string name="weather_sc">风力：</string>
+    <string name="weather_spd">风速：</string>
 
 
 </resources>

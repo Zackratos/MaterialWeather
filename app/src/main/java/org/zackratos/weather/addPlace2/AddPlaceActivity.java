@@ -15,7 +15,7 @@ import com.melnykov.fab.FloatingActionButton;
 
 import org.zackratos.ultimatebar.UltimateBar;
 import org.zackratos.weather.BaseActivity;
-import org.zackratos.weather.HeWindApi;
+import org.zackratos.weather.weather.HeWindApi;
 import org.zackratos.weather.HttpUtils;
 import org.zackratos.weather.R;
 import org.zackratos.weather.SingleToast;

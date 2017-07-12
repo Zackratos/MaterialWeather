@@ -14,7 +14,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import org.zackratos.weather.BaseFragment;
-import org.zackratos.weather.Place;
+import org.zackratos.weather.addPlace.Place;
 import org.zackratos.weather.R;
 
 import java.util.List;

@@ -1,15 +1,12 @@
 package org.zackratos.weather.weatherlist;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
-import android.widget.CompoundButton;
 
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
 import org.zackratos.weather.R;
-import org.zackratos.weather.Weather;
+import org.zackratos.weather.weather.Weather;
 
 import java.util.List;
 

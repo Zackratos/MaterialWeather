@@ -3,8 +3,6 @@ package org.zackratos.weather.addPlace;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.zackratos.weather.Place;
-
 import java.util.List;
 
 import io.reactivex.Observable;

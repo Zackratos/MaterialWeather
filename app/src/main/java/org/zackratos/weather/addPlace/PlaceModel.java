@@ -1,8 +1,6 @@
 package org.zackratos.weather.addPlace;
 
 
-import org.zackratos.weather.Place;
-
 import java.util.List;
 
 import retrofit2.Call;

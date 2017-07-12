@@ -25,7 +25,8 @@ import com.melnykov.fab.FloatingActionButton;
 import org.zackratos.weather.Constants;
 import org.zackratos.weather.R;
 import org.zackratos.weather.SPUtils;
-import org.zackratos.weather.Weather;
+import org.zackratos.weather.SingleToast;
+import org.zackratos.weather.weather.Weather;
 import org.zackratos.weather.addPlace.AddPlaceActivity;
 import org.zackratos.weather.mvp.MvpFragment;
 
@@ -109,7 +110,7 @@ public class WeatherListFragment extends MvpFragment<WeatherListContract.View, W
 
 
         presenter.setHeader();
-        presenter.initWeathers();
+        presenter.initWeathers(getActivity());
     }
 
 
@@ -120,14 +121,14 @@ public class WeatherListFragment extends MvpFragment<WeatherListContract.View, W
 
                 case Constants.AddPlace.LOCATE_RESULT:
                     callback.closeDrawer(false);
-                    presenter.initWeathers();
+                    presenter.initWeathers(getActivity());
                     break;
 
                 case Constants.AddPlace.SELECT_RESULT:
                     callback.closeDrawer(false);
 //                    int countyId = AddPlaceActivity.getCountyId(data);
 //                    presenter.addWeather(countyId);
-                    presenter.initWeathers();
+                    presenter.initWeathers(getActivity());
                     break;
 
                 default:
@@ -145,9 +146,21 @@ public class WeatherListFragment extends MvpFragment<WeatherListContract.View, W
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) {
+            presenter.cancelRequest();
+        }
+    }
+
+
+
+
+
 
     public interface Callback {
-        void onWeatherChecked(String weatherId);
+        void onWeatherChecked(Weather weather);
 
         void closeDrawer(boolean animate);
     }
@@ -269,7 +282,20 @@ public class WeatherListFragment extends MvpFragment<WeatherListContract.View, W
 
 
     @Override
-    public void onWeatherChecked(String weatherId) {
-        callback.onWeatherChecked(weatherId);
+    public void onWeatherChecked(Weather weather) {
+        callback.onWeatherChecked(weather);
+    }
+
+
+    @Override
+    public void showError(String message) {
+        SingleToast.getInstance(getActivity()).show(message);
+    }
+
+
+
+    @Override
+    public void onLocate() {
+        presenter.initWeathers(getActivity());
     }
 }

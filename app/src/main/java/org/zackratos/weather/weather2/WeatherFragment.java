@@ -19,7 +19,7 @@ import org.litepal.crud.DataSupport;
 import org.zackratos.weather.BaseFragment;
 import org.zackratos.weather.R;
 import org.zackratos.weather.SingleToast;
-import org.zackratos.weather.Weather;
+import org.zackratos.weather.weather.Weather;
 import org.zackratos.weather.hewind.Daily;
 import org.zackratos.weather.hewind.HeWeather;
 import org.zackratos.weather.hewind.Hourly;

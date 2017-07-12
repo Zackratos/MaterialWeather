@@ -1,4 +1,4 @@
-package org.zackratos.weather;
+package org.zackratos.weather.weatherlist;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
@@ -11,6 +11,7 @@ import retrofit2.http.GET;
 
 public interface BingApi {
 
+    public static final String BING_PIC = "http://guolin.tech/";
 
     @GET("api/bing_pic")
     Call<ResponseBody> address();

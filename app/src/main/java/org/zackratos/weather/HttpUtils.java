@@ -1,7 +1,9 @@
 package org.zackratos.weather;
 
 import org.zackratos.weather.Constants.Http;
-import org.zackratos.weather.hewind.HeWind;
+import org.zackratos.weather.addPlace.PlaceApi;
+import org.zackratos.weather.weather.HeWindApi;
+import org.zackratos.weather.weather.HeWindCache;
 
 import java.io.File;
 import java.util.HashMap;
@@ -29,14 +31,11 @@ public class HttpUtils {
 
 
     public static Retrofit getPlaceRetrofit() {
-        return getRetrofit(Http.PLACE_URL);
+        return getRetrofit(PlaceApi.PLACE_URL);
     }
 
 
 
-    public static Retrofit getSeniverseRetrofit() {
-        return getRetrofit(Http.SENIVERSE_URL);
-    }
 
     public static Retrofit getHeWindRetrofit() {
         return getRetrofit(Http.HE_WIND_URL);

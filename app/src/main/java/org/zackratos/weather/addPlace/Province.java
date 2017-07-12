@@ -1,6 +1,8 @@
-package org.zackratos.weather;
+package org.zackratos.weather.addPlace;
 
 import com.google.gson.annotations.SerializedName;
+
+import org.zackratos.weather.addPlace.Place;
 
 /**
  * Created by Administrator on 2017/6/17.

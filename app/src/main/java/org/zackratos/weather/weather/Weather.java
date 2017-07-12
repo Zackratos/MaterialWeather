@@ -1,4 +1,4 @@
-package org.zackratos.weather;
+package org.zackratos.weather.weather;
 
 import org.litepal.crud.DataSupport;
 

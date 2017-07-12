@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.zackratos.weather.Province;
 import org.zackratos.weather.R;
 
 

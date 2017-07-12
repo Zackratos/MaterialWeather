@@ -1,6 +1,5 @@
 package org.zackratos.weather.addPlace;
 
-import org.zackratos.weather.Place;
 import org.zackratos.weather.mvp.BaseModel;
 import org.zackratos.weather.mvp.BasePresenter;
 import org.zackratos.weather.mvp.BaseView;
