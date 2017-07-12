@@ -155,6 +155,8 @@ public class WeatherFragment extends MvpFragment<WeatherContract.View, WeatherCo
         void setName(String name);
 
         void setNowInfo(Now now);
+
+//        void setBackground(String code);
     }
 
 
@@ -323,6 +325,9 @@ public class WeatherFragment extends MvpFragment<WeatherContract.View, WeatherCo
 
     @Override
     public void requestError(String message) {
+        refreshLayout.setRefreshing(false);
+        callback.setNowInfo(null);
+        itemContainer.removeAllViews();
         SingleToast.getInstance(getActivity()).show(message);
     }
 }

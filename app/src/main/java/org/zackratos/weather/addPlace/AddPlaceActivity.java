@@ -83,6 +83,7 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
                     @Override
                     public void onLocated(Location location) {
                         if (!location.isSuccess()) {
+                            dialog.dismiss();
                             SingleToast.getInstance(AddPlaceActivity.this)
                                     .show(location.getErrorInfo());
                             return;
@@ -126,12 +127,15 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
 //                        ContentValues values = new ContentValues();
 //                        values.put("checked", false);
 //                        DataSupport.updateAll(Weather.class, values, "weatherid != ?", searchBasic.getId());
+                        int index = SPUtils.getWeatherIndex(AddPlaceActivity.this);
                         Weather weather = new Weather.Builder()
                                 .weatherId(searchBasic.getId())
                                 .countyName(searchBasic.getCity())
+                                .index(index)
                                 .build();
                         weather.saveOrUpdate("weatherid = ?", searchBasic.getId());
                         SPUtils.putWeatherId(AddPlaceActivity.this, searchBasic.getId());
+                        SPUtils.putWeatherIndex(AddPlaceActivity.this, ++index);
                     }
                 })
                 .subscribe(new Observer<SearchBasic>() {
@@ -147,6 +151,7 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        dialog.dismiss();
                         SingleToast.getInstance(AddPlaceActivity.this)
                                 .show(e.getMessage());
                     }
@@ -282,12 +287,15 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
                 .doOnNext(new Consumer<County>() {
                     @Override
                     public void accept(@NonNull County county) throws Exception {
+                        int index = SPUtils.getWeatherIndex(AddPlaceActivity.this);
                         Weather weather = new Weather.Builder()
                                 .weatherId(county.getWeatherId())
                                 .countyName(county.getName())
+                                .index(index)
                                 .build();
                         weather.saveOrUpdate("weatherid = ?", county.getWeatherId());
                         SPUtils.putWeatherId(AddPlaceActivity.this, county.getWeatherId());
+                        SPUtils.putWeatherIndex(AddPlaceActivity.this, ++index);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())

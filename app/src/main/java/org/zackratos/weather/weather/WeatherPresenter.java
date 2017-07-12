@@ -50,6 +50,9 @@ public class WeatherPresenter extends WeatherContract.Presenter {
 
             @Override
             protected void onPostExecute(Weather weather) {
+                if (view == null) {
+                    return;
+                }
                 view.weatherInited(weather);
                 refreshWeatherInfo(context, false);
             }

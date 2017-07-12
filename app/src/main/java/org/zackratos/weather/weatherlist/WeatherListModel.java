@@ -32,12 +32,15 @@ public class WeatherListModel implements WeatherListContract.Model {
 
     @Override
     public void saveLocation(SearchBasic searchBasic) {
+        int index = SPUtils.getWeatherIndex(context);
         Weather weather = new Weather.Builder()
                 .weatherId(searchBasic.getId())
                 .countyName(searchBasic.getCity())
+                .index(index)
                 .build();
         weather.saveOrUpdate("weatherid = ?", searchBasic.getId());
         SPUtils.putWeatherId(context, searchBasic.getId());
+        SPUtils.putWeatherIndex(context, ++index);
     }
 
 

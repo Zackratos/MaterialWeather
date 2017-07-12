@@ -62,6 +62,8 @@ public class MainActivity extends BaseActivity implements
     ImageView backgroundView;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,12 +95,14 @@ public class MainActivity extends BaseActivity implements
                 .add(R.id.main_drawer_view, WeatherListFragment.newInstance())
                 .commit();
 
-
-        Glide.with(this)
-                .load("https://raw.githubusercontent.com/Zackratos/MaterialWeather/master/background/999.jpg")
-                .into(backgroundView);
-
     }
+
+
+
+
+
+
+
 
     private Disposable d;
 
@@ -259,8 +263,20 @@ public class MainActivity extends BaseActivity implements
     public void setNowInfo(Now now) {
         if (now == null) {
             collapsingToolbar.setTitle(" ");
+            Glide.with(this).load("").into(backgroundView);
+            return;
         }
         collapsingToolbar.setTitle(now.getCond().getTxt() + " " + now.getTmp() + "°");
+        Glide.with(this).load(bgUrl(now.getCond().getCode())).into(backgroundView);
     }
 
+
+
+
+
+    private String bgUrl(String code) {
+
+        return "https://raw.githubusercontent.com/Zackratos/MaterialWeather/master/background/" +
+                code + ".jpg";
+    }
 }

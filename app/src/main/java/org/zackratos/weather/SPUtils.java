@@ -13,6 +13,7 @@ public class SPUtils {
     private static final String BING_ADDRESS = "bing_address";
     private static final String WEATHER_SID = "weather_sid";
     private static final String WEATHER_ID = "weather_id";
+    private static final String WEATHER_INDEX = "weather_index";
 
 
     private static SharedPreferences getDSP(Context context) {
@@ -79,6 +80,17 @@ public class SPUtils {
 
     public static void putBingAdd(Context context, String address) {
         putString(context, BING_ADDRESS, address);
+    }
+
+
+    public static void putWeatherIndex(Context context, int index) {
+        putInt(context, WEATHER_INDEX, index);
+    }
+
+
+
+    public static int getWeatherIndex(Context context) {
+        return getInt(context, WEATHER_INDEX);
     }
 
 

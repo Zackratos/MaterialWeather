@@ -12,7 +12,6 @@ public class Weather extends DataSupport {
 
     private int index;
 
-//    private boolean checked;
 
     private String countyName;
 
@@ -22,7 +21,7 @@ public class Weather extends DataSupport {
 
         this.countyName = builder.countyName;
         this.weatherId = builder.weatherId;
-
+        this.index = builder.index;
 //        this.checked = builder.checked;
     }
 
