@@ -204,17 +204,22 @@ public class WeatherListFragment extends MvpFragment<WeatherListContract.View, W
 
     private OnItemSwipeListener swipeListener;
 
+
+    private int from;
+
     private void initDragListener() {
         if (dragListener == null) {
+
             dragListener = new OnItemDragListener() {
                 @Override
                 public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
-
+//                    from = pos;
                 }
 
                 @Override
                 public void onItemDragMoving(RecyclerView.ViewHolder source, int from, RecyclerView.ViewHolder target, int to) {
-
+//                    Log.d(TAG, "onItemDragMoving: " + from + " " + to);
+                    presenter.drag(from, to);
                 }
 
                 @Override
@@ -224,6 +229,7 @@ public class WeatherListFragment extends MvpFragment<WeatherListContract.View, W
             };
         }
     }
+
 
     private void initSwipeListener() {
         if (swipeListener == null) {
@@ -281,10 +287,12 @@ public class WeatherListFragment extends MvpFragment<WeatherListContract.View, W
     }
 
 
+
     @Override
     public void onWeatherChecked(Weather weather) {
         callback.onWeatherChecked(weather);
     }
+
 
 
     @Override

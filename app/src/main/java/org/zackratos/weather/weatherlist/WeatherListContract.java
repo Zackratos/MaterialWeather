@@ -40,6 +40,7 @@ public interface WeatherListContract {
         void putWeatherId(String weatherId);
         String getWeatherId();
         void deleteWeather(int position);
+        void switchWeather(int from, int to);
     }
 
 
@@ -52,6 +53,7 @@ public interface WeatherListContract {
         abstract void setHeader();
         abstract void initWeathers(Activity activity);
         abstract void clickWeather(int position);
+        abstract void drag(int from, int to);
         abstract void deleteWeather(int position);
 //        abstract void addWeather(int countyId);
     }

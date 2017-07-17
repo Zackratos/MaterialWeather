@@ -24,6 +24,7 @@ import org.zackratos.weather.hewind.Now;
 import org.zackratos.weather.hewind.Suggestion;
 import org.zackratos.weather.hewind.Wind;
 import org.zackratos.weather.mvp.MvpFragment;
+import org.zackratos.weather.service.WeatherService;
 import org.zackratos.weather.weather2.DailyDialog;
 
 
@@ -91,7 +92,6 @@ public class WeatherFragment extends MvpFragment<WeatherContract.View, WeatherCo
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
 
@@ -175,10 +175,13 @@ public class WeatherFragment extends MvpFragment<WeatherContract.View, WeatherCo
     public void weatherInited(Weather weather) {
 
         callback.setName(weather.getCountyName());
+        callback.setNowInfo(null);
     }
+
 
     @Override
     public void onWeatherInfoUpdate(HeWeather weather) {
+        callback.setName(weather.getBasic().getCity());
         callback.setNowInfo(weather.getNow());
         itemContainer.removeAllViews();
         addHours(weather.getHourlies());
@@ -187,6 +190,8 @@ public class WeatherFragment extends MvpFragment<WeatherContract.View, WeatherCo
         addWind(weather.getNow().getWind());
         addSuggestion(weather.getSuggestion());
         refreshLayout.setRefreshing(false);
+        getActivity().startService(WeatherService.newIntent(getActivity(),
+                weather.getBasic().getCity(), weather.getNow()));
     }
 
 
@@ -280,6 +285,7 @@ public class WeatherFragment extends MvpFragment<WeatherContract.View, WeatherCo
         itemContainer.addView(suggestionView);
 
     }
+
 
 
     private void addNow(Now now) {

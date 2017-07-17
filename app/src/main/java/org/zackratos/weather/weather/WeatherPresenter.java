@@ -114,17 +114,24 @@ public class WeatherPresenter extends WeatherContract.Presenter {
                 }, new Consumer<Disposable>() {
                     @Override
                     public void accept(@NonNull Disposable disposable) throws Exception {
-                        model.setDisposable(disposable);
+
+                        WeatherPresenter.this.disposable = disposable;
                     }
                 });
 
     }
 
 
+    private Disposable disposable;
+
+
 
 
     @Override
     void cancelRequest() {
-        model.cancelRequest();
+//        model.cancelRequest();
+        if (disposable != null) {
+            disposable.dispose();
+        }
     }
 }

@@ -43,12 +43,16 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="4fd541d68313fd3a5a8a323be262d551"></meta-data>
+            android:value="4fd541d68313fd3a5a8a323be262d551">
+
+        </meta-data>
 
         <service
             android:name=".service.WeatherService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true">
+
+        </service>
     </application>
 
 </manifest>

@@ -238,4 +238,10 @@ public class WeatherListPresenter extends WeatherListContract.Presenter {
     void deleteWeather(int position) {
 
     }
+
+
+    @Override
+    void drag(int from, int to) {
+        model.switchWeather(from, to);
+    }
 }

@@ -1,10 +1,13 @@
 package org.zackratos.weather.hewind;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Administrator on 2017/6/26.
  */
 
-public class Now {
+public class Now implements Parcelable {
 
     /**
      * cond : {"code":"104","txt":"阴"}
@@ -161,4 +164,33 @@ public class Now {
             this.spd = spd;
         }
     }*/
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.cond, flags);
+        dest.writeString(this.tmp);
+    }
+
+
+    protected Now(Parcel in) {
+        this.cond = in.readParcelable(Cond.class.getClassLoader());
+        this.tmp = in.readString();
+    }
+
+    public static final Parcelable.Creator<Now> CREATOR = new Parcelable.Creator<Now>() {
+        @Override
+        public Now createFromParcel(Parcel source) {
+            return new Now(source);
+        }
+
+        @Override
+        public Now[] newArray(int size) {
+            return new Now[size];
+        }
+    };
 }

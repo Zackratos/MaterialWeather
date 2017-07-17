@@ -20,8 +20,8 @@ public interface WeatherContract {
     interface Model extends BaseModel {
         Weather initWeather(String weatherId);
         File cacheFolder(Context context);
-        void setDisposable(Disposable disposable);
-        void cancelRequest();
+//        void setDisposable(Disposable disposable);
+//        void cancelRequest();
         Weather getWeather();
     }
 

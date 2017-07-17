@@ -1,6 +1,8 @@
 package org.zackratos.weather;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +39,12 @@ import io.reactivex.disposables.Disposable;
 
 public class MainActivity extends BaseActivity implements
         WeatherFragment.Callback, WeatherListFragment.Callback {
+
+
+    public static Intent newIntent(Context context) {
+        return new Intent(context, MainActivity.class);
+    }
+
 
 
     @BindView(R.id.main_collapsing)

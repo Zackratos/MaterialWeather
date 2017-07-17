@@ -1,6 +1,7 @@
 package org.zackratos.weather.weatherlist;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.litepal.crud.DataSupport;
 import org.zackratos.weather.HttpUtils;
@@ -64,7 +65,7 @@ public class WeatherListModel implements WeatherListContract.Model {
 
     @Override
     public void initWeathers() {
-        List<Weather> ws = DataSupport.order("id").find(Weather.class);
+        List<Weather> ws = DataSupport.order("index desc").find(Weather.class);
         if (weathers == null) {
             weathers = new WeatherArrayList<>(new WeatherArrayList.OnRemoveListener() {
                 @Override
@@ -155,5 +156,34 @@ public class WeatherListModel implements WeatherListContract.Model {
     @Override
     public void deleteWeather(int position) {
 
+    }
+
+
+    @Override
+    public void switchWeather(final int from, final int to) {
+
+        Log.d("TAG", "switchWeather: " + from + " " + to);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (weathers != null && weathers.size() > from && weathers.size() > to) {
+
+                    Weather fromWeather = weathers.get(from);
+
+                    Weather toWeather = weathers.get(to);
+
+                    int fromIndex = fromWeather.getIndex();
+
+                    fromWeather.setIndex(toWeather.getIndex());
+
+                    toWeather.setIndex(fromIndex);
+
+                    fromWeather.save();
+
+                    toWeather.save();
+                }
+            }
+        }).start();
     }
 }

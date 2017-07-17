@@ -1,18 +1,35 @@
 package org.zackratos.weather.service;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.v7.app.NotificationCompat;
+import android.widget.RemoteViews;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.NotificationTarget;
+
+import org.zackratos.weather.MainActivity;
+import org.zackratos.weather.R;
+import org.zackratos.weather.hewind.Now;
+
+import static org.zackratos.weather.Constants.Http.HE_WIND_ICON;
 
 
 public class WeatherService extends Service {
 
-    public static final String WEATHER_ID = "weather_id";
+//    public static final String WEATHER_ID = "weather_id";
 
-    public static Intent newIntent(Context context, String weatherId) {
+    private static final String NAME = "name";
+    private static final String NOW = "now";
+
+    public static Intent newIntent(Context context, String name, Now now) {
         Intent intent = new Intent(context, WeatherService.class);
-        intent.putExtra(WEATHER_ID, weatherId);
+        intent.putExtra(NAME, name);
+        intent.putExtra(NOW, now);
         return intent;
     }
 
@@ -26,6 +43,26 @@ public class WeatherService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        String name = intent.getStringExtra(NAME);
+        Now now = intent.getParcelableExtra(NOW);
+        RemoteViews rv = new RemoteViews(getPackageName(), R.layout.notification_weather);
+        rv.setTextViewText(R.id.notification_title, name);
+        rv.setTextViewText(R.id.notification_content, now.getCond().getTxt() + "  " + now.getTmp() + "°C");
+
+        PendingIntent pi = PendingIntent.getActivity(this, 0, MainActivity.newIntent(this), 0);
+
+        Notification notification = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContent(rv)
+                .setContentIntent(pi)
+                .build();
+        NotificationTarget target = new NotificationTarget(
+                this, rv, R.id.notification_image, notification, 1
+        );
+        Glide.with(this).load(HE_WIND_ICON + now.getCond().getCode() + ".png")
+                .asBitmap()
+                .into(target);
+        startForeground(1, notification);
 
 
         return super.onStartCommand(intent, flags, startId);

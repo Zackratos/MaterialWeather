@@ -18,7 +18,6 @@ public class WeatherModel implements WeatherContract.Model {
 
     private Weather weather;
 
-    private Disposable disposable;
 
 
 
@@ -59,19 +58,4 @@ public class WeatherModel implements WeatherContract.Model {
     }
 
 
-
-
-    @Override
-    public void setDisposable(Disposable disposable) {
-        this.disposable = disposable;
-
-    }
-
-
-    @Override
-    public void cancelRequest() {
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
-        }
-    }
 }
