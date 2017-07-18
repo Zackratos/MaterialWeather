@@ -34,7 +34,6 @@ import org.zackratos.weather.weatherlist.WeatherListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.disposables.Disposable;
 
 
 public class MainActivity extends BaseActivity implements
@@ -112,15 +111,9 @@ public class MainActivity extends BaseActivity implements
 
 
 
-    private Disposable d;
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (d != null && !d.isDisposed()) {
-            d.dispose();
-        }
     }
 
     @Override
@@ -167,14 +160,14 @@ public class MainActivity extends BaseActivity implements
             ViewGroup decorView = (ViewGroup) window.getDecorView();
             int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            if (navigationBarExist()) {
+/*            if (navigationBarExist()) {
                 option = option | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-            }
+            }*/
             decorView.setSystemUiVisibility(option);
-            window.setNavigationBarColor(Color.TRANSPARENT);
             window.setStatusBarColor(Color.TRANSPARENT);
+            window.setNavigationBarColor(color);
             decorView.addView(createStatusBarView(color), 0);
-            if (navigationBarExist()) {
+/*            if (navigationBarExist()) {
                 decorView.addView(createNavBarView(color));
                 ViewGroup.MarginLayoutParams drawerParams = (ViewGroup.MarginLayoutParams)
                         drawerView.getLayoutParams();
@@ -184,7 +177,7 @@ public class MainActivity extends BaseActivity implements
                         weatherContainer.getLayoutParams();
                 params.bottomMargin += getNavigationHeight();
                 weatherContainer.setLayoutParams(params);
-            }
+            }*/
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -280,11 +273,80 @@ public class MainActivity extends BaseActivity implements
 
 
 
+    private static final String BG_URL = "https://raw.githubusercontent.com/Zackratos/MaterialWeather/master/background/";
+
+
 
 
     private String bgUrl(String code) {
+        String newCode;
+        switch (code) {
+            case "102":
+            case "103":
+                newCode = "101";
+                break;
 
-        return "https://raw.githubusercontent.com/Zackratos/MaterialWeather/master/background/" +
-                code + ".jpg";
+            case "202":
+            case "203":
+            case "204":
+            case "205":
+            case "206":
+            case "207":
+                newCode = "200";
+                break;
+
+            case "208":
+            case "209":
+            case "210":
+            case "211":
+            case "213":
+                newCode = "212";
+                break;
+
+            case "301":
+            case "305":
+            case "306":
+            case "307":
+            case "308":
+            case "309":
+            case "310":
+            case "311":
+            case "312":
+            case "313":
+                newCode = "300";
+                break;
+
+            case "303":
+            case "304":
+                newCode = "302";
+                break;
+
+            case "401":
+            case "402":
+            case "403":
+            case "404":
+            case "405":
+            case "406":
+            case "407":
+                newCode = "400";
+                break;
+
+            case "501":
+            case "502":
+                newCode = "500";
+                break;
+
+            case "504":
+            case "507":
+            case "508":
+                newCode = "503";
+                break;
+
+            default:
+                newCode = code;
+                break;
+        }
+
+        return String.format("%s%s.jpg", BG_URL, newCode);
     }
 }

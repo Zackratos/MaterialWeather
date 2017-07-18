@@ -25,7 +25,6 @@ import org.zackratos.weather.hewind.Suggestion;
 import org.zackratos.weather.hewind.Wind;
 import org.zackratos.weather.mvp.MvpFragment;
 import org.zackratos.weather.service.WeatherService;
-import org.zackratos.weather.weather2.DailyDialog;
 
 
 import java.util.List;
@@ -210,11 +209,20 @@ public class WeatherFragment extends MvpFragment<WeatherContract.View, WeatherCo
             CardView hourView = (CardView) LayoutInflater.from(getActivity())
                     .inflate(R.layout.item_weather_hour_item, hourContainer, false);
             TextView tempView = ButterKnife.findById(hourView, R.id.hour_temp);
-            tempView.setText(hourly.getTmp() + "°");
+            tempView.setText(String.format("%s°C", hourly.getTmp()));
             TextView timeView = ButterKnife.findById(hourView, R.id.hour_time);
             timeView.setText(hourly.getDate().split(" ")[1]);
             ImageView iconView = ButterKnife.findById(hourView, R.id.hour_icon);
             Glide.with(this).load(HE_WIND_ICON + hourly.getCond().getCode() + ".png").into(iconView);
+
+            hourView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    HourDialog dialog = HourDialog.newInstance();
+
+                    dialog.show(getFragmentManager(), "hour");
+                }
+            });
 
             hourContainer.addView(hourView);
         }
@@ -229,7 +237,7 @@ public class WeatherFragment extends MvpFragment<WeatherContract.View, WeatherCo
     private void addDailies(List<Daily> dailies) {
 
 
-        for (Daily daily : dailies) {
+        for (final Daily daily : dailies) {
             CardView dailyView = (CardView) LayoutInflater.from(getActivity())
                     .inflate(R.layout.item_weather_daily, itemContainer, false);
             TextView dateView = ButterKnife.findById(dailyView, R.id.daily_date);
@@ -237,18 +245,18 @@ public class WeatherFragment extends MvpFragment<WeatherContract.View, WeatherCo
 
 
             ImageView dayIcon = ButterKnife.findById(dailyView, R.id.daily_day_icon);
-            Glide.with(this).load(HE_WIND_ICON + daily.getCond().getCode_d() + ".png").into(dayIcon);
+            Glide.with(this).load(String.format("%s%s.png", HE_WIND_ICON, daily.getCond().getCode_d())).into(dayIcon);
 
             ImageView nightIcon = ButterKnife.findById(dailyView, R.id.daily_night_icon);
-            Glide.with(this).load(HE_WIND_ICON + daily.getCond().getCode_n() + ".png").into(nightIcon);
+            Glide.with(this).load(String.format("%s%s.png", HE_WIND_ICON, daily.getCond().getCode_n())).into(nightIcon);
 
             TextView tempView = ButterKnife.findById(dailyView, R.id.daily_temp);
-            tempView.setText(daily.getTmp().getMin() + "°" + " - " + daily.getTmp().getMax() + "°");
+            tempView.setText(String.format("%s°C - %s°C", daily.getTmp().getMin(), daily.getTmp().getMax()));
 
             dailyView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DailyDialog dialog = DailyDialog.newInstance();
+                    DailyDialog dialog = DailyDialog.newInstance(daily);
 
                     dialog.show(getFragmentManager(), "daily");
                 }
@@ -292,15 +300,15 @@ public class WeatherFragment extends MvpFragment<WeatherContract.View, WeatherCo
         CardView nowView = (CardView) LayoutInflater.from(getActivity())
                 .inflate(R.layout.item_weather_now, itemContainer, false);
         TextView flView = ButterKnife.findById(nowView, R.id.now_fl);
-        flView.setText(now.getFl());
+        flView.setText(String.format("%s°C", now.getFl()));
         TextView humView = ButterKnife.findById(nowView, R.id.now_hum);
-        humView.setText(now.getHum() + " %");
+        humView.setText(String.format("%s %%", now.getHum()));
         TextView pcpnView = ButterKnife.findById(nowView, R.id.now_pcpn);
-        pcpnView.setText(now.getPcpn() + " mm");
+        pcpnView.setText(String.format("%s mm", now.getPcpn()));
         TextView presView = ButterKnife.findById(nowView, R.id.now_pres);
-        presView.setText(now.getPres());
+        presView.setText(String.format("%s pa", now.getPres()));
         TextView visView = ButterKnife.findById(nowView, R.id.now_vis);
-        visView.setText(now.getVis() + " km");
+        visView.setText(String.format("%s km", now.getVis()));
         itemContainer.addView(nowView);
     }
 
@@ -311,7 +319,7 @@ public class WeatherFragment extends MvpFragment<WeatherContract.View, WeatherCo
                 .inflate(R.layout.item_weather_wind, itemContainer, false);
 
         TextView degView = ButterKnife.findById(windView, R.id.wind_deg);
-        degView.setText(wind.getDeg() + " / 360°");
+        degView.setText(String.format("%s° / 360°", wind.getDeg()));
 
         TextView dirView = ButterKnife.findById(windView, R.id.wind_dir);
         dirView.setText(wind.getDir());
@@ -320,7 +328,7 @@ public class WeatherFragment extends MvpFragment<WeatherContract.View, WeatherCo
         scView.setText(wind.getSc());
 
         TextView spdView = ButterKnife.findById(windView, R.id.wind_spd);
-        spdView.setText(wind.getSpd() + " kmph");
+        spdView.setText(String.format("%s kmph", wind.getSpd()));
 
         itemContainer.addView(windView);
     }

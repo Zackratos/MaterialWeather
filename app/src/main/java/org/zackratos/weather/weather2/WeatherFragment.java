@@ -231,14 +231,14 @@ public class WeatherFragment extends BaseFragment implements WeatherView {
             TextView tempView = ButterKnife.findById(dailyView, R.id.daily_temp);
             tempView.setText(daily.getTmp().getMin() + "°" + " - " + daily.getTmp().getMax() + "°");
 
-            dailyView.setOnClickListener(new View.OnClickListener() {
+/*            dailyView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     DailyDialog dialog = DailyDialog.newInstance();
 
                     dialog.show(getFragmentManager(), "daily");
                 }
-            });
+            });*/
 
             itemContainer.addView(dailyView);
         }

@@ -4,7 +4,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">设置</string>
+    <string name="action_exit">退出</string>
 
 
     <!--add_place-->
@@ -41,4 +42,39 @@
     <string name="weather_spd">风速：</string>
 
 
+
+
+    <!--daily-->
+    <string name="daily_mr">月升时间：</string>
+    <string name="daily_ms">月落时间：</string>
+    <string name="daily_sr">日出时间：</string>
+    <string name="daily_ss">日落时间：</string>
+    <string name="daily_txt_d">白天天气状况：</string>
+    <string name="daily_txt_n">夜间天气状况：</string>
+    <string name="daily_hum">相对湿度：</string>
+    <string name="daily_pcpn">降水量：</string>
+    <string name="daily_pop">降水概率：</string>
+    <string name="daily_pres">气压：</string>
+    <string name="daily_max">最高温度：</string>
+    <string name="daily_min">最低温度：</string>
+    <string name="daily_deg">风向：</string>
+    <string name="daily_dir">风向：</string>
+    <string name="daily_sc">风力：</string>
+    <string name="daily_spd">风速：</string>
+
+
+
+    <!--hour-->
+    <string name="hour_txt">天气状况：</string>
+    <string name="hour_hum">相对湿度：</string>
+    <string name="hour_pop">降水概率：</string>
+    <string name="hour_pres">气压：</string>
+    <string name="hour_tmp">温度：</string>
+    <string name="hour_deg">风向：</string>
+    <string name="hour_dir">风向：</string>
+    <string name="hour_sc">风力：</string>
+    <string name="hour_spd">风速：</string>
+    
+    
+    
 </resources>

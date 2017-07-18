@@ -26,6 +26,12 @@ public class WeatherService extends Service {
     private static final String NAME = "name";
     private static final String NOW = "now";
 
+
+    public static Intent newIntent(Context context) {
+        return new Intent(context, WeatherService.class);
+    }
+
+
     public static Intent newIntent(Context context, String name, Now now) {
         Intent intent = new Intent(context, WeatherService.class);
         intent.putExtra(NAME, name);
@@ -47,7 +53,7 @@ public class WeatherService extends Service {
         Now now = intent.getParcelableExtra(NOW);
         RemoteViews rv = new RemoteViews(getPackageName(), R.layout.notification_weather);
         rv.setTextViewText(R.id.notification_title, name);
-        rv.setTextViewText(R.id.notification_content, now.getCond().getTxt() + "  " + now.getTmp() + "°C");
+        rv.setTextViewText(R.id.notification_content, String.format("%s  %s°C", now.getCond().getTxt(), now.getTmp()));
 
         PendingIntent pi = PendingIntent.getActivity(this, 0, MainActivity.newIntent(this), 0);
 
@@ -59,7 +65,7 @@ public class WeatherService extends Service {
         NotificationTarget target = new NotificationTarget(
                 this, rv, R.id.notification_image, notification, 1
         );
-        Glide.with(this).load(HE_WIND_ICON + now.getCond().getCode() + ".png")
+        Glide.with(this).load(String.format("%s%s.png", HE_WIND_ICON, now.getCond().getCode()))
                 .asBitmap()
                 .into(target);
         startForeground(1, notification);

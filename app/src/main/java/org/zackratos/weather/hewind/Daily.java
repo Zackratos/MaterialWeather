@@ -1,10 +1,13 @@
 package org.zackratos.weather.hewind;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Administrator on 2017/6/26.
  */
 
-public class Daily {
+public class Daily implements Parcelable {
 
     /**
      * astro : {"mr":"07:18","ms":"21:19","sr":"05:08","ss":"19:19"}
@@ -120,7 +123,7 @@ public class Daily {
         this.wind = wind;
     }
 
-    public static class Astro {
+    public static class Astro implements Parcelable {
         /**
          * mr : 07:18
          * ms : 21:19
@@ -164,9 +167,44 @@ public class Daily {
         public void setSs(String ss) {
             this.ss = ss;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.mr);
+            dest.writeString(this.ms);
+            dest.writeString(this.sr);
+            dest.writeString(this.ss);
+        }
+
+        public Astro() {
+        }
+
+        protected Astro(Parcel in) {
+            this.mr = in.readString();
+            this.ms = in.readString();
+            this.sr = in.readString();
+            this.ss = in.readString();
+        }
+
+        public static final Creator<Astro> CREATOR = new Creator<Astro>() {
+            @Override
+            public Astro createFromParcel(Parcel source) {
+                return new Astro(source);
+            }
+
+            @Override
+            public Astro[] newArray(int size) {
+                return new Astro[size];
+            }
+        };
     }
 
-    public static class Cond {
+    public static class Cond implements Parcelable {
         /**
          * code_d : 104
          * code_n : 101
@@ -210,9 +248,42 @@ public class Daily {
         public void setTxt_n(String txt_n) {
             this.txt_n = txt_n;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.code_d);
+            dest.writeString(this.code_n);
+            dest.writeString(this.txt_d);
+            dest.writeString(this.txt_n);
+        }
+
+
+        protected Cond(Parcel in) {
+            this.code_d = in.readString();
+            this.code_n = in.readString();
+            this.txt_d = in.readString();
+            this.txt_n = in.readString();
+        }
+
+        public static final Creator<Cond> CREATOR = new Creator<Cond>() {
+            @Override
+            public Cond createFromParcel(Parcel source) {
+                return new Cond(source);
+            }
+
+            @Override
+            public Cond[] newArray(int size) {
+                return new Cond[size];
+            }
+        };
     }
 
-    public static class Tmp {
+    public static class Tmp implements Parcelable {
         /**
          * max : 32
          * min : 23
@@ -236,6 +307,35 @@ public class Daily {
         public void setMin(String min) {
             this.min = min;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.max);
+            dest.writeString(this.min);
+        }
+
+
+        protected Tmp(Parcel in) {
+            this.max = in.readString();
+            this.min = in.readString();
+        }
+
+        public static final Creator<Tmp> CREATOR = new Creator<Tmp>() {
+            @Override
+            public Tmp createFromParcel(Parcel source) {
+                return new Tmp(source);
+            }
+
+            @Override
+            public Tmp[] newArray(int size) {
+                return new Tmp[size];
+            }
+        };
     }
 
 /*    public static class Wind {
@@ -283,4 +383,51 @@ public class Daily {
             this.spd = spd;
         }
     }*/
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.astro, flags);
+        dest.writeParcelable(this.cond, flags);
+        dest.writeString(this.date);
+        dest.writeString(this.hum);
+        dest.writeString(this.pcpn);
+        dest.writeString(this.pop);
+        dest.writeString(this.pres);
+        dest.writeParcelable(this.tmp, flags);
+        dest.writeString(this.uv);
+        dest.writeString(this.vis);
+        dest.writeParcelable(this.wind, flags);
+    }
+
+
+    protected Daily(Parcel in) {
+        this.astro = in.readParcelable(Astro.class.getClassLoader());
+        this.cond = in.readParcelable(Cond.class.getClassLoader());
+        this.date = in.readString();
+        this.hum = in.readString();
+        this.pcpn = in.readString();
+        this.pop = in.readString();
+        this.pres = in.readString();
+        this.tmp = in.readParcelable(Tmp.class.getClassLoader());
+        this.uv = in.readString();
+        this.vis = in.readString();
+        this.wind = in.readParcelable(Wind.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Daily> CREATOR = new Parcelable.Creator<Daily>() {
+        @Override
+        public Daily createFromParcel(Parcel source) {
+            return new Daily(source);
+        }
+
+        @Override
+        public Daily[] newArray(int size) {
+            return new Daily[size];
+        }
+    };
 }
