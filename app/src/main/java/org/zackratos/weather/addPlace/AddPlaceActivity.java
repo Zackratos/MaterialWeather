@@ -1,5 +1,6 @@
 package org.zackratos.weather.addPlace;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.melnykov.fab.FloatingActionButton;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.zackratos.ultimatebar.UltimateBar;
 import org.zackratos.weather.BaseActivity;
@@ -61,15 +63,27 @@ public class AddPlaceActivity extends BaseActivity implements PlaceCallback {
 
     @OnClick(R.id.add_place_locate)
     void onLocateClick() {
-        initDialog();
-        dialog.show();
-        locate();
+        RxPermissions rxPermissions = new RxPermissions(this);
+        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION)
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(@NonNull Boolean aBoolean) throws Exception {
+                        if (aBoolean) {
+                            initDialog();
+                            dialog.show();
+                            locate();
+                        }
+                    }
+                });
+
     }
 
 
     private void initDialog() {
         if (dialog == null) {
             dialog = new ProgressDialog(this);
+            dialog.setMessage(getString(R.string.add_place_locate));
+            dialog.setCanceledOnTouchOutside(false);
         }
     }
 

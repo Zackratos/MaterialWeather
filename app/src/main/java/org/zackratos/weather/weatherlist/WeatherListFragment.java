@@ -205,7 +205,6 @@ public class WeatherListFragment extends MvpFragment<WeatherListContract.View, W
     private OnItemSwipeListener swipeListener;
 
 
-    private int from;
 
     private void initDragListener() {
         if (dragListener == null) {

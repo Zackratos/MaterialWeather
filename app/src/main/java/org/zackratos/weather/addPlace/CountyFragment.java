@@ -75,9 +75,4 @@ public class CountyFragment extends PlaceFragment<County> {
     }
 
 
-
-    /*    @Override
-    protected PlacePresenter<County> getPresenter() {
-        return new PlacePresenter<>(new CountyModel(city));
-    }*/
 }

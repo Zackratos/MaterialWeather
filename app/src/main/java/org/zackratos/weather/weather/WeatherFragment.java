@@ -204,7 +204,7 @@ public class WeatherFragment extends MvpFragment<WeatherContract.View, WeatherCo
         itemContainer.addView(view);
         LinearLayout hourContainer = ButterKnife.findById(view, R.id.hour_container);
 
-        for (Hourly hourly : hourlies) {
+        for (final Hourly hourly : hourlies) {
 
             CardView hourView = (CardView) LayoutInflater.from(getActivity())
                     .inflate(R.layout.item_weather_hour_item, hourContainer, false);
@@ -218,7 +218,7 @@ public class WeatherFragment extends MvpFragment<WeatherContract.View, WeatherCo
             hourView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    HourDialog dialog = HourDialog.newInstance();
+                    HourDialog dialog = HourDialog.newInstance(hourly);
 
                     dialog.show(getFragmentManager(), "hour");
                 }

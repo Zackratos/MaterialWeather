@@ -95,16 +95,16 @@ public class DailyDialog extends DialogFragment {
         ssView.setText(astro.getSs());
         txtDView.setText(cond.getTxt_d());
         txtNView.setText(cond.getTxt_n());
-        humView.setText(daily.getHum());
-        pcpnView.setText(daily.getPcpn());
-        popView.setText(daily.getPop());
-        presView.setText(daily.getPres());
-        maxView.setText(tmp.getMax());
-        minView.setText(tmp.getMin());
-        degView.setText(wind.getDeg());
+        humView.setText(String.format("%s %%", daily.getHum()));
+        pcpnView.setText(String.format("%s mm", daily.getPcpn()));
+        popView.setText(String.format("%s %%", daily.getPop()));
+        presView.setText(String.format("%s pa", daily.getPres()));
+        maxView.setText(String.format("%s °C", tmp.getMax()));
+        minView.setText(String.format("%s °C", tmp.getMin()));
+        degView.setText(String.format("%s° / 360°", wind.getDeg()));
         dirView.setText(wind.getDir());
         scView.setText(wind.getSc());
-        spdView.setText(wind.getSpd());
+        spdView.setText(String.format("%s kmph", wind.getSpd()));
 
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setTitle(daily.getDate())

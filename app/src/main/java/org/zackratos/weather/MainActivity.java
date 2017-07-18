@@ -14,6 +14,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import org.zackratos.weather.hewind.Now;
+import org.zackratos.weather.service.WeatherService;
 import org.zackratos.weather.weather.Weather;
 import org.zackratos.weather.weather.WeatherFragment;
 import org.zackratos.weather.weatherlist.WeatherListFragment;
@@ -140,10 +142,15 @@ public class MainActivity extends BaseActivity implements
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        Log.d(TAG, "onOptionsItemSelected: ");
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             
+            return true;
+        } else if (id == R.id.action_exit)  {
+            Log.d(TAG, "onOptionsItemSelected: exit");
+            stopService(WeatherService.newIntent(this));
+            finish();
             return true;
         }
 
@@ -346,7 +353,8 @@ public class MainActivity extends BaseActivity implements
                 newCode = code;
                 break;
         }
-
-        return String.format("%s%s.jpg", BG_URL, newCode);
+        String url = String.format("%s%s.jpg", BG_URL, newCode);
+        Log.d(TAG, "bgUrl: " + url);
+        return url;
     }
 }

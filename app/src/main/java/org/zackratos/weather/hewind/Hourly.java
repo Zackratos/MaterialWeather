@@ -1,10 +1,13 @@
 package org.zackratos.weather.hewind;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Administrator on 2017/6/26.
  */
 
-public class Hourly {
+public class Hourly implements Parcelable {
 
 
     /**
@@ -152,4 +155,43 @@ public class Hourly {
             this.spd = spd;
         }
     }*/
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.cond, flags);
+        dest.writeString(this.date);
+        dest.writeString(this.hum);
+        dest.writeString(this.pop);
+        dest.writeString(this.pres);
+        dest.writeString(this.tmp);
+        dest.writeParcelable(this.wind, flags);
+    }
+
+
+    protected Hourly(Parcel in) {
+        this.cond = in.readParcelable(Cond.class.getClassLoader());
+        this.date = in.readString();
+        this.hum = in.readString();
+        this.pop = in.readString();
+        this.pres = in.readString();
+        this.tmp = in.readString();
+        this.wind = in.readParcelable(Wind.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Hourly> CREATOR = new Parcelable.Creator<Hourly>() {
+        @Override
+        public Hourly createFromParcel(Parcel source) {
+            return new Hourly(source);
+        }
+
+        @Override
+        public Hourly[] newArray(int size) {
+            return new Hourly[size];
+        }
+    };
 }

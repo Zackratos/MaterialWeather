@@ -1,7 +1,10 @@
 package org.zackratos.weather.weatherlist;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.litepal.crud.DataSupport;
 import org.zackratos.weather.weather.HeWindApi;
@@ -54,6 +57,7 @@ public class WeatherListPresenter extends WeatherListContract.Presenter {
 
     @Override
     void locate(Activity activity) {
+
         XMapLocation.newBuilder(activity)
                 .build()
                 .locate(new LocateListener() {
@@ -191,7 +195,17 @@ public class WeatherListPresenter extends WeatherListContract.Presenter {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
                         if (NO_WEATHER.equals(throwable.getMessage())){
-                            locate(activity);
+                            RxPermissions rxPermissions = new RxPermissions(activity);
+                            rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION)
+                                    .subscribe(new Consumer<Boolean>() {
+                                        @Override
+                                        public void accept(@NonNull Boolean aBoolean) throws Exception {
+                                            if (aBoolean) {
+                                                locate(activity);
+                                            }
+                                        }
+                                    });
+
                         }
                     }
                 });

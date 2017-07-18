@@ -35,13 +35,4 @@ public class Constants {
 
 
 
-    public static final class Weather {
-        public static final String WEATHER_ID = "weather_id";
-    }
-
-
-    public static final class County {
-//        public static final String COUNTY_ID = "county_id";
-    }
-
 }

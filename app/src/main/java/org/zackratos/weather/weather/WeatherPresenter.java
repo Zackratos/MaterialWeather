@@ -130,7 +130,7 @@ public class WeatherPresenter extends WeatherContract.Presenter {
     @Override
     void cancelRequest() {
 //        model.cancelRequest();
-        if (disposable != null) {
+        if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
         }
     }

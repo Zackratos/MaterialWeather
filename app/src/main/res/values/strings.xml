@@ -15,6 +15,7 @@
     <string name="add_place_county">地区</string>
     <string name="add_place_get_place_fail">获取%s失败，请检查网络</string>
     <string name="add_place_refresh_fail">刷新失败，请检查网络</string>
+    <string name="add_place_locate">正在定位</string>
 
 
     
