@@ -1,6 +1,6 @@
 # MaterialWeather
 
-MaterialWeather 是一款遵循 Material Design 风格的天气应用，主要有以下功能：
+MaterialWeather 是一款遵循 Material Design 风格的天气应用，使用 mvp + rxjava + retrofit + rxcache 架构，主要有以下功能：
 
 1、罗列全国所有的省、市、县；
 
