@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'Zackratos'
             keyPassword 'android'
-            storeFile file('D:/MyAndroidProjects/Zackratos.jks')
+            storeFile file('../keystore/Zackrato.jks')
             storePassword 'android'
         }
     }
